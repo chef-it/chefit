@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMasterList extends Migration
+class CreateRecipesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,22 @@ class CreateMasterList extends Migration
      */
     public function up()
     {
-        Schema::create('master_list', function (Blueprint $table) {
+        Schema::create('recipes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->decimal('price',5,2);
-            $table->decimal('ap_quantity',5,2);
-            $table->integer('ap_unit', false, true);
-            $table->decimal('yield',10,6);
-            $table->decimal('ap_small_price',10,6);
-            $table->json('data');
             $table->integer('owner', false, true);
+            $table->decimal('portions_per_batch', 10, 3);
+            $table->decimal('menu_price', 10, 1)->nullable();
+            $table->decimal('batch_quantity', 10, 6)->nullable();
+            $table->integer('batch_unit', false, true)->nullable();
+            $table->integer('component_only');
             $table->timestamps();
-            $table->foreign('ap_unit')
-                ->references('id')->on('units')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
             $table->foreign('owner')
                 ->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreign('batch_unit')
+                ->references('id')->on('units')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -42,6 +41,6 @@ class CreateMasterList extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('master_list');
+        Schema::dropIfExists('recipes');
     }
 }
