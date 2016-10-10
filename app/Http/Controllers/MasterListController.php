@@ -16,13 +16,11 @@ class MasterListController extends Controller
 
     /**
      * Instantiate a new MasterListController instance.
-     *
-     *
      */
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('ownership', ['only' => ['edit']]);
+        $this->middleware('ownership', ['only' => ['edit', 'update', 'destroy']]);
     }
 
     /**

@@ -12,13 +12,22 @@ use App\Http\Requests;
 class RecipeController extends Controller
 {
     /**
+     * Instantiate a new MasterListController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('ownership', ['only' => ['edit', 'update', 'destroy']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $recipes = Recipe::all();
+        $recipes = Recipe::where('owner', '=', Auth::user()->id)->get();
         return view('recipes.index')->withRecipes($recipes);
     }
 
