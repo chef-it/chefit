@@ -47,8 +47,7 @@ class MasterListController extends Controller
      */
     public function create()
     {
-        $units = Math::UnitsDropDown();
-        return view('masterlist.create')->withUnits($units);
+        return view('masterlist.create')->withUnits(Math::UnitsDropDown());
     }
 
     /**
@@ -60,9 +59,6 @@ class MasterListController extends Controller
     public function store(Request $request)
     {
         //Validate
-
-        //Math
-
 
         //Store
         $masterlist = new MasterList();
@@ -101,7 +97,7 @@ class MasterListController extends Controller
     public function edit($id)
     {
         $masterlist = MasterList::find($id);
-        return view('masterlist.edit')->withMasterlist($masterlist);
+        return view('masterlist.edit')->withMasterlist($masterlist)->withUnits(Math::UnitsDropDown());
     }
 
     /**

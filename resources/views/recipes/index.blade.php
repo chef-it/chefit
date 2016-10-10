@@ -8,7 +8,50 @@
 @endsection
 
 @section('content')
-    Placeholder for Recipe List
+    <div id="MasterList" class="col-md-12">
+        <div class="block-flat">
+            <div class="header">
+                <h3 class="text-center">Recipes</h3>
+                <hr>
+            </div>
+            <div class="content">
+                <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
+                    <thead>
+                    <tr>
+                        <th class="col-md-4" data-priority="1">Name</th>
+                        <th class="col-md-1">Price</th>
+                        <th class="col-md-1">Costing %</th>
+                        <th class="col-md-1"></th>
+                        <th class="col-md-1"></th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($recipes as $recipe)
+                        <tr>
+                            <td>{{ $recipe->name }}</td>
+                            @if ($recipe->component_only == 1)
+                                <td>Component</td>
+                                <td>Component</td>
+                            @else
+                                <td>{{ $recipe->menu_price }}</td>
+                                <td>TODO</td>
+                            @endif
+                            <td>{{ Html::linkRoute('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-info btn-block']) }}</td>
+                            <td>{{ Html::linkRoute('recipes.show', 'View', [$recipe->id], ['class' => 'btn btn-primary btn-block']) }}</td>
+                            <td>
+                                {!! Form::open(['route' => ['recipes.destroy', $recipe->id], 'method' => 'DELETE']) !!}
+                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}
+                                {!! Form::close() !!}
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <a href="/recipes/create" class="btn btn-success btn-lg btn-block" style="margin-top: 1em">Add New Item</a>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -22,11 +65,7 @@
             //initialize the javascript
             //Basic Instance
             $("#datatable").dataTable({
-                responsive: true,
-                columnDefs: [
-                    { responsivePriority: 1, targets: 0 },
-                    { responsivePriority: 2, targets: -1 }
-                ]
+                responsive: true
             });
 
             //Search input style

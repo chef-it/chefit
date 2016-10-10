@@ -9,35 +9,39 @@
 @section('content')
     <div class="panel">
         <div class="panel-heading">
-            <h3 class="text-center">New Ingredient</h3>
+            <h3 class="text-center">New Recipe</h3>
             <hr>
         </div>
         <div class="panel-body">
-            {!! Form::open(['route' => 'masterlist.store']) !!}
-            <div class="form-group col-md-12 setmyheight">
+            {!! Form::model($recipe, ['route' => ['recipes.update', $recipe->id], 'method' => 'PUT']) !!}
+            <div class="form-group col-md-6 setmyheight">
                 {{ Form::label('name', 'Name: ') }}
                 {{ Form::text('name', null, array('class' => 'form-control')) }}
             </div>
-            <div class="form-group col-md-3 setmyheight">
-                {{ Form::label('price', 'Price: ') }}
-                {{ Form::text('price', null, array('class' => 'form-control')) }}
+            <div class="form-group col-md-6 setmyheight">
+                {{ Form::label('menu_price', 'Price: ') }}
+                {{ Form::text('menu_price', null, array('class' => 'form-control')) }}
             </div>
             <div class="form-group col-md-3 setmyheight">
-                {{ Form::label('ap_quantity', 'AP Value: ') }}
-                {{ Form::text('ap_quantity', null, array('class' => 'form-control')) }}
+                {{ Form::label('portions_per_batch', 'Portions per Batch: ') }}
+                {{ Form::text('portions_per_batch', null, array('class' => 'form-control')) }}
             </div>
             <div class="form-group col-md-3 setmyheight">
-                {{ Form::label('ap_unit', 'AP Unit: ') }}
-                {{ Form::select('ap_unit', $units, null, array('class' => 'form-control')) }}
+                {{ Form::label('batch_quantity', 'Batch Quantity: ') }}
+                {{ Form::text('batch_quantity', null, array('class' => 'form-control')) }}
             </div>
             <div class="form-group col-md-3 setmyheight">
-                {{ Form::label('yield', 'Yield: ') }}
-                {{ Form::text('yield', null, array('class' => 'form-control')) }}
+                {{ Form::label('batch_unit', 'Batch Unit: ') }}
+                {{ Form::select('batch_unit', $units, $recipe->batch_unit, array('class' => 'form-control')) }}
+            </div>
+            <div class="form-group col-md-3 setmyheight">
+                {{ Form::label('component_only', 'Component: ') }}
+                {{ Form::checkbox('component_only', '1') }}
             </div>
             <div class="form-group col-md-12 setmyheight">
                 {{ Form::submit('Add', array('class' => 'btn btn-success btn-lg btn-block')) }}
                 {{ Form::close() }}
-                <a href="/masterlist" class="btn btn-danger btn-lg btn-block"><< Back</a>
+                <a href="/recipes" class="btn btn-danger btn-lg btn-block"><< Back</a>
             </div>
         </div>
     </div>

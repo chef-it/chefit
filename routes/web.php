@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::resource('masterlist', 'MasterListController');
-Route::resource('recipes', 'RecipesController');
+Route::resource('recipes', 'RecipeController');
 
 Auth::routes();
 

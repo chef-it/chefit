@@ -27,7 +27,7 @@
             </div>
             <div class="form-group col-md-3 setmyheight">
                 {{ Form::label('ap_unit', 'AP Unit: ') }}
-                {{ Form::text('ap_unit', null, array('class' => 'form-control')) }}
+                {{ Form::select('ap_unit', $units, $masterlist->ap_unit, array('class' => 'form-control')) }}
             </div>
             <div class="form-group col-md-3 setmyheight">
                 {{ Form::label('yield', 'Yield: ') }}
@@ -36,6 +36,7 @@
             <div class="form-group col-md-12 setmyheight">
                 {{ Form::submit('Update', array('class' => 'btn btn-success btn-lg btn-block')) }}
                 {{ Form::close() }}
+                <a href="/masterlist" class="btn btn-danger btn-lg btn-block"><< Back</a>
             </div>
         </div>
     </div>
