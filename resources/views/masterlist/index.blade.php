@@ -35,7 +35,7 @@
                                 <td>{{ $table->ap_quantity }}</td>
                                 <td>{{ $table->ap_unit }}</td>
                                 <td>{{ $table->yield }}</td>
-                                <td>{{ Html::linkRoute('masterlist.edit', 'Edit', [$table->id], ['class' => 'btn btn-info btn-block']) }}</td>
+                                <td>{{ link_to_route('masterlist.edit', 'Edit', [$table->id], ['class' => 'btn btn-info btn-block']) }}</td>
                                 <td>
                                     {!! Form::open(['route' => ['masterlist.destroy', $table->id], 'method' => 'DELETE']) !!}
                                         {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}

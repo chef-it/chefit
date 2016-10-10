@@ -11,36 +11,33 @@
     <div id="MasterList" class="col-md-12">
         <div class="block-flat">
             <div class="header">
-                <h3 class="text-center">Recipes</h3>
+                <h3 class="text-center">Recipe Name</h3>
                 <hr>
             </div>
             <div class="content">
                 <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
                     <thead>
                     <tr>
-                        <th class="col-md-4" data-priority="1">Name</th>
-                        <th class="col-md-1">Price</th>
-                        <th class="col-md-1">Costing %</th>
+                        <th class="col-md-4" data-priority="1">Ingredient</th>
+                        <th class="col-md-1">Quantity</th>
+                        <th class="col-md-1">Unit</th>
+                        <th class="col-md-1">Cost</th>
                         <th class="col-md-1"></th>
                         <th class="col-md-1"></th>
                         <th class="col-md-1"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($recipes as $recipe)
+                    @foreach($elements as $element)
                         <tr>
-                            <td>{{ $recipe->name }}</td>
-                            @if ($recipe->component_only == 1)
-                                <td>Component</td>
-                                <td>Component</td>
-                            @else
-                                <td>{{ $recipe->menu_price }}</td>
-                                <td>TODO</td>
-                            @endif
-                            <td>{{ link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-info btn-block']) }}</td>
-                            <td>{{ link_to_route('recipes.elements.index', 'View', [$recipe->id], ['class' => 'btn btn-primary btn-block']) }}</td>
+                            <td>{{ $element->master_list }}</td>
+                            <td>{{ $element->quantity }}</td>
+                            <td>{{ $element->unit }}</td>
+                            <td>TODO</td>
+                            <td>{{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe, $element->id], ['class' => 'btn btn-info btn-block']) }}</td>
+                            <td>{{ link_to_route('recipes.elements.show', 'View', [$element->recipe, $element->id], ['class' => 'btn btn-primary btn-block']) }}</td>
                             <td>
-                                {!! Form::open(['route' => ['recipes.destroy', $recipe->id], 'method' => 'DELETE']) !!}
+                                {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe, $element->id], 'method' => 'DELETE']) !!}
                                 {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}
                                 {!! Form::close() !!}
                             </td>
@@ -49,7 +46,7 @@
                     </tbody>
                 </table>
             </div>
-            <a href="/recipes/create" class="btn btn-success btn-lg btn-block" style="margin-top: 1em">Add New Item</a>
+            <a href="/elements/create" class="btn btn-success btn-lg btn-block" style="margin-top: 1em">Add New Item</a>
         </div>
     </div>
 @endsection
