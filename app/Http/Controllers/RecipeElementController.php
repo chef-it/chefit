@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Math;
+use App\Classes\DesignHelper;
 use App\Recipe;
 use App\RecipeElement;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class RecipeElementController extends Controller
         $recipe = Recipe::select('name')->where('id', '=', $recipeId)->first();
 
         // Get all recipe elements for a recipe.
-        $elements = RecipeElement::select('recipe_elements.*', 'master_list.name as master_list', 'units.name as unit')
+        $elements = RecipeElement::select('recipe_elements.*', 'master_list.name as name', 'units.name as unit_name')
             // Join masterlist name
             ->join('master_list', 'recipe_elements.master_list', '=', 'master_list.id')
             // Join unit name
@@ -33,6 +34,12 @@ class RecipeElementController extends Controller
 
         foreach($elements as $element){
             $element->quantity = $element->quantity + 0;
+            $element->cost = Math::CalcIngredientCost(
+                $element->master_list,
+                $element->quantity,
+                $element->unit
+            );
+            $element->cost = number_format($element->cost, 2);
         }
 
         return view('recipes.elements.index')
@@ -48,8 +55,8 @@ class RecipeElementController extends Controller
     public function create()
     {
         return view('recipes.elements.create')
-            ->withUnits(Math::UnitsDropDown())
-            ->withIngredients(Math::IngredientsDropDown());
+            ->withUnits(DesignHelper::UnitsDropDown())
+            ->withIngredients(DesignHelper::IngredientsDropDown());
     }
 
     /**
@@ -98,8 +105,8 @@ class RecipeElementController extends Controller
         $element->quantity = $element->quantity + 0;
         return view('recipes.elements.edit')
             ->withElement($element)
-            ->withIngredients(Math::IngredientsDropDown())
-            ->withUnits(Math::UnitsDropDown());
+            ->withIngredients(DesignHelper::IngredientsDropDown())
+            ->withUnits(DesignHelper::UnitsDropDown());
     }
 
     /**
@@ -130,10 +137,10 @@ class RecipeElementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($recipe, $id)
     {
         $element = RecipeElement::find($id);
-        $element->destroy($id);
-        return redirect()->route('recipes.elements.index');
+        $element->delete();
+        return redirect()->route('recipes.elements.index', $recipe);
     }
 }

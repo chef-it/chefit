@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Recipe;
+use App\RecipeElement;
 use Illuminate\Http\Request;
 use App\Classes\Math;
+use App\Classes\DesignHelper;
 use Auth;
 
 use App\Http\Requests;
@@ -28,6 +30,12 @@ class RecipeController extends Controller
     public function index()
     {
         $recipes = Recipe::where('owner', '=', Auth::user()->id)->get();
+
+        foreach ($recipes as $recipe) {
+            $recipe->costPercent = Math::CalcRecipeCostPercent($recipe->id);
+            $recipe->menu_price = number_format($recipe->menu_price, 2);
+        }
+
         return view('recipes.index')->withRecipes($recipes);
     }
 
@@ -38,7 +46,7 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        return view('recipes.create')->withUnits(Math::UnitsDropDown());
+        return view('recipes.create')->withUnits(DesignHelper::UnitsDropDown());
     }
 
     /**
@@ -93,7 +101,7 @@ class RecipeController extends Controller
         $recipe = Recipe::find($id);
         $recipe->portions_per_batch = $recipe->portions_per_batch + 0;
         $recipe->batch_quantity = $recipe->batch_quantity + 0;
-        return view('recipes.edit')->withRecipe($recipe)->withUnits(Math::UnitsDropDown());
+        return view('recipes.edit')->withRecipe($recipe)->withUnits(DesignHelper::UnitsDropDown());
     }
 
     /**
@@ -136,7 +144,7 @@ class RecipeController extends Controller
     public function destroy($id)
     {
         $recipe = Recipe::find($id);
-        $recipe->destroy($id);
+        $recipe->delete();
         return redirect()->route('recipes.index');
     }
 }

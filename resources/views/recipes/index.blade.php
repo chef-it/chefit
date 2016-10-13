@@ -35,7 +35,7 @@
                                 <td>Component</td>
                             @else
                                 <td>{{ $recipe->menu_price }}</td>
-                                <td>TODO</td>
+                                <td>{{ $recipe->costPercent }}</td>
                             @endif
                             <td>{{ link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-info btn-block']) }}</td>
                             <td>{{ link_to_route('recipes.elements.index', 'View', [$recipe->id], ['class' => 'btn btn-primary btn-block']) }}</td>

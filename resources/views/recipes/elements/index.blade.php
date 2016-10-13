@@ -30,10 +30,10 @@
                     <tbody>
                     @foreach($elements as $element)
                         <tr>
-                            <td>{{ $element->master_list }}</td>
+                            <td>{{ $element->name }}</td>
                             <td>{{ $element->quantity }}</td>
-                            <td>{{ $element->unit }}</td>
-                            <td>TODO</td>
+                            <td>{{ $element->unit_name }}</td>
+                            <td>{{ $element->cost }}</td>
                             <td>{{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe, $element->id], ['class' => 'btn btn-info btn-block']) }}</td>
                             <td>{{ link_to_route('recipes.elements.show', 'View', [$element->recipe, $element->id], ['class' => 'btn btn-primary btn-block']) }}</td>
                             <td>

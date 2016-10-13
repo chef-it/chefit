@@ -6,6 +6,7 @@ use App\Units;
 use Illuminate\Http\Request;
 use App\MasterList;
 use App\Classes\Math;
+use App\Classes\DesignHelper;
 use Auth;
 
 use App\Http\Requests;
@@ -45,7 +46,7 @@ class MasterListController extends Controller
      */
     public function create()
     {
-        return view('masterlist.create')->withUnits(Math::UnitsDropDown());
+        return view('masterlist.create')->withUnits(DesignHelper::UnitsDropDown());
     }
 
     /**
@@ -97,7 +98,7 @@ class MasterListController extends Controller
         $masterlist = MasterList::find($id);
         return view('masterlist.edit')
             ->withMasterlist($masterlist)
-            ->withUnits(Math::UnitsDropDown());
+            ->withUnits(DesignHelper::UnitsDropDown());
     }
 
     /**

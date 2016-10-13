@@ -2,55 +2,17 @@
 
 namespace App\Classes;
 use App\MasterList;
+use App\Recipe;
+use App\RecipeElement;
 use Illuminate\Support\Facades\DB;
 use App\Units;
 use Auth;
 
+/**
+ * Class Math
+ * @package App\Classes
+ */
 class Math {
-
-    /**
-     * Creates array to pass to Blade Form::Select of all measurement units.
-     *
-     * @return array
-     */
-    public static function UnitsDropDown(){
-        $units = DB::table('units')->orderBy('system', 'DESC')->orderby('order')->get();
-        $select = array();
-
-        foreach($units as $unit){
-            switch($unit->system){
-                case 1:
-                    $unit->system = "US System";
-                    break;
-                case 2:
-                    $unit->system = "General";
-                    break;
-                case 3:
-                    $unit->system = "Metric System";
-                    break;
-            }
-            $select[$unit->system][$unit->id] = $unit->name;
-        }
-
-        return $select;
-    }
-
-    /**
-     * Creates array to pass to Blade Form::Select of all masterlist items.
-     *
-     * @return array
-     */
-    public static function IngredientsDropDown(){
-        $ingredients = MasterList::select('id', 'name')
-            ->where('owner', '=', Auth::user()->id)
-            ->orderBy('name')->get();
-
-        foreach($ingredients as $ingredient){
-            $select[$ingredient->id] = $ingredient->name;
-        }
-
-        return $select;
-    }
 
     /**
      * Returns the price per Small Unit for a master_list entry.
@@ -63,6 +25,60 @@ class Math {
     public static function CalcApUnitCost($price,$ap_quantity,$ap_unit){
         $units = DB::table('units')->select('factor')->where('id', '=', $ap_unit)->first();
         return ($price / $ap_quantity) / $units->factor;
+    }
+
+    /**
+     * Returns the ingredient cost.
+     *
+     * @param $master_list
+     * @param $quantity
+     * @param $unit
+     * @return mixed
+     */
+    public static function CalcIngredientCost($master_list, $quantity, $unit){
+        // Get master_list record
+        $ingredient = MasterList::find($master_list);
+        // Get units record for master_list small unit
+        $fromUnit = Units::find(Math::GetApSmallUnit($ingredient->ap_unit));
+        // Get units record for $unit
+        $toUnit = Units::find($unit);
+
+        // If from and to are the same, the ingredient is at the small price already, just multiply
+        // by quantity and return.
+        if($fromUnit->id == $toUnit->id){
+            return $ingredient->ap_small_price * $quantity;
+        }
+
+        // If from and to are in the same system, and same type, apply factor and return.
+        if($fromUnit->system == $toUnit->system && $fromUnit->weight == $toUnit->weight){
+            return $ingredient->ap_small_price * $toUnit->factor * $quantity;
+        }else {
+            die(dump($ingredient, $fromUnit, $toUnit, $quantity));
+        }
+    }
+
+    public static function CalcRecipeCost($recipe){
+        $elements = RecipeElement::where('recipe', '=', $recipe)->get();
+        $recipe = new \stdClass();
+        $recipe->cost = 0;
+
+        // Cycle through each ingredient, calculate cost, and add to the total cost;
+        foreach ($elements as $element){
+            $recipe->cost += Math::CalcIngredientCost(
+                $element->master_list,
+                $element->quantity,
+                $element->unit
+            );
+        }
+        return $recipe->cost;
+    }
+
+    public static function CalcRecipeCostPercent($recipeID){
+        $recipe = Recipe::find($recipeID);
+        $recipe->cost = Math::CalcRecipeCost($recipeID);
+
+        // Divide total cost by menu price and return percentage.
+        return number_format(($recipe->cost / $recipe->menu_price * 100),2);
     }
 
     /**
