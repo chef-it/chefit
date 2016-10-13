@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Classes;
+use App\MasterList;
 use Illuminate\Support\Facades\DB;
 use App\Units;
+use Auth;
 
 class Math {
 
@@ -34,6 +36,23 @@ class Math {
     }
 
     /**
+     * Creates array to pass to Blade Form::Select of all masterlist items.
+     *
+     * @return array
+     */
+    public static function IngredientsDropDown(){
+        $ingredients = MasterList::select('id', 'name')
+            ->where('owner', '=', Auth::user()->id)
+            ->orderBy('name')->get();
+
+        foreach($ingredients as $ingredient){
+            $select[$ingredient->id] = $ingredient->name;
+        }
+
+        return $select;
+    }
+
+    /**
      * Returns the price per Small Unit for a master_list entry.
      *
      * @param $price
@@ -47,7 +66,7 @@ class Math {
     }
 
     /**
-     * Determines the Small Unit for a master_list entry.
+     * Determines the Small Unit for a master_list entry based on type and system.
      *
      * @param $ap_unit
      * @return int|null

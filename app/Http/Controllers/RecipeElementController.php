@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Math;
+use App\Recipe;
 use App\RecipeElement;
 use Illuminate\Http\Request;
+use Auth;
 
 use App\Http\Requests;
 
@@ -16,9 +19,25 @@ class RecipeElementController extends Controller
      */
     public function index($recipeId)
     {
-        //TODO: Join master_list and units
-        $elements = RecipeElement::where('recipe','=', $recipeId)->get();
-        return view('recipes.elements.index')->withElements($elements);
+        // Get recipe name
+        $recipe = Recipe::select('name')->where('id', '=', $recipeId)->first();
+
+        // Get all recipe elements for a recipe.
+        $elements = RecipeElement::select('recipe_elements.*', 'master_list.name as master_list', 'units.name as unit')
+            // Join masterlist name
+            ->join('master_list', 'recipe_elements.master_list', '=', 'master_list.id')
+            // Join unit name
+            ->join('units', 'recipe_elements.unit', '=', 'units.id')
+            ->where('recipe','=', $recipeId)
+            ->get();
+
+        foreach($elements as $element){
+            $element->quantity = $element->quantity + 0;
+        }
+
+        return view('recipes.elements.index')
+            ->withElements($elements)
+            ->withRecipe($recipe);
     }
 
     /**
@@ -28,7 +47,9 @@ class RecipeElementController extends Controller
      */
     public function create()
     {
-        //
+        return view('recipes.elements.create')
+            ->withUnits(Math::UnitsDropDown())
+            ->withIngredients(Math::IngredientsDropDown());
     }
 
     /**
@@ -39,7 +60,19 @@ class RecipeElementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Validate
+
+        //Store
+        $recipeElement = new RecipeElement();
+        $recipeElement->recipe = $request->recipe;
+        $recipeElement->master_list = $request->master_list;
+        $recipeElement->owner = Auth::user()->id;
+        $recipeElement->quantity = $request->quantity;
+        $recipeElement->unit = $request->unit;
+
+        $recipeElement->save();
+
+        return redirect()->route('recipes.elements.index', $recipeElement->recipe);
     }
 
     /**
@@ -59,9 +92,14 @@ class RecipeElementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($recipe, $id)
     {
-        //
+        $element = RecipeElement::find($id);
+        $element->quantity = $element->quantity + 0;
+        return view('recipes.elements.edit')
+            ->withElement($element)
+            ->withIngredients(Math::IngredientsDropDown())
+            ->withUnits(Math::UnitsDropDown());
     }
 
     /**
@@ -71,9 +109,19 @@ class RecipeElementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $recipe, $id)
     {
-        //
+        //Validate
+
+        //Store
+        $recipeElement = RecipeElement::find($id);
+        $recipeElement->master_list = $request->master_list;
+        $recipeElement->quantity = $request->quantity;
+        $recipeElement->unit = $request->unit;
+
+        $recipeElement->save();
+
+        return redirect()->route('recipes.elements.index', $recipeElement->recipe);
     }
 
     /**
@@ -84,6 +132,8 @@ class RecipeElementController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $element = RecipeElement::find($id);
+        $element->destroy($id);
+        return redirect()->route('recipes.elements.index');
     }
 }

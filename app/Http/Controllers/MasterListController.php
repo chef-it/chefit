@@ -95,7 +95,9 @@ class MasterListController extends Controller
     public function edit($id)
     {
         $masterlist = MasterList::find($id);
-        return view('masterlist.edit')->withMasterlist($masterlist)->withUnits(Math::UnitsDropDown());
+        return view('masterlist.edit')
+            ->withMasterlist($masterlist)
+            ->withUnits(Math::UnitsDropDown());
     }
 
     /**

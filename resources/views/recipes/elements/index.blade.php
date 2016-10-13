@@ -11,7 +11,7 @@
     <div id="MasterList" class="col-md-12">
         <div class="block-flat">
             <div class="header">
-                <h3 class="text-center">Recipe Name</h3>
+                <h3 class="text-center">{{ $recipe->name }}</h3>
                 <hr>
             </div>
             <div class="content">
@@ -46,7 +46,7 @@
                     </tbody>
                 </table>
             </div>
-            <a href="/elements/create" class="btn btn-success btn-lg btn-block" style="margin-top: 1em">Add New Item</a>
+            {{ link_to_route('recipes.elements.create', 'Add New Element', [Request::segment(2)], ['class' => 'btn btn-success btn-lg btn-block']) }}
         </div>
     </div>
 @endsection

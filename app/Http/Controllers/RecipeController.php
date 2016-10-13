@@ -136,7 +136,7 @@ class RecipeController extends Controller
     public function destroy($id)
     {
         $recipe = Recipe::find($id);
-        $recipe->destroy();
+        $recipe->destroy($id);
         return redirect()->route('recipes.index');
     }
 }

@@ -9,7 +9,7 @@
 @section('content')
     <div class="panel">
         <div class="panel-heading">
-            <h3 class="text-center">New Recipe</h3>
+            <h3 class="text-center">Edit {{ $recipe->name }}</h3>
             <hr>
         </div>
         <div class="panel-body">
