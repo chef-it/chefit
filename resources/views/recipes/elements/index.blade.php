@@ -24,7 +24,6 @@
                         <th class="col-md-1">Cost</th>
                         <th class="col-md-1"></th>
                         <th class="col-md-1"></th>
-                        <th class="col-md-1"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -35,7 +34,6 @@
                             <td>{{ $element->unit_name }}</td>
                             <td>{{ $element->cost }}</td>
                             <td>{{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe, $element->id], ['class' => 'btn btn-info btn-block']) }}</td>
-                            <td>{{ link_to_route('recipes.elements.show', 'View', [$element->recipe, $element->id], ['class' => 'btn btn-primary btn-block']) }}</td>
                             <td>
                                 {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe, $element->id], 'method' => 'DELETE']) !!}
                                 {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}

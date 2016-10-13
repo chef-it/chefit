@@ -39,24 +39,69 @@ class Math {
         // Get master_list record
         $ingredient = MasterList::find($master_list);
         // Get units record for master_list small unit
-        $fromUnit = Units::find(Math::GetApSmallUnit($ingredient->ap_unit));
+        $inputUnit = Units::find(Math::GetApSmallUnit($ingredient->ap_unit));
         // Get units record for $unit
-        $toUnit = Units::find($unit);
+        $outputUnit = Units::find($unit);
 
-        // If from and to are the same, the ingredient is at the small price already, just multiply
+        // If input and output are the same, the ingredient is at the small price already, just multiply
         // by quantity and return.
-        if($fromUnit->id == $toUnit->id){
+        if($inputUnit->id == $outputUnit->id){
             return $ingredient->ap_small_price * $quantity;
         }
 
-        // If from and to are in the same system, and same type, apply factor and return.
-        if($fromUnit->system == $toUnit->system && $fromUnit->weight == $toUnit->weight){
-            return $ingredient->ap_small_price * $toUnit->factor * $quantity;
-        }else {
-            die(dump($ingredient, $fromUnit, $toUnit, $quantity));
+        // If input and output are different systems, but same type, convert input to output system,
+        // modify the ingredient price to reflect new change, and continue on.
+        if($inputUnit->system != $outputUnit->system && $inputUnit->weight == $outputUnit->weight){
+
+            if($inputUnit->weight == 1){
+                // We're dealing with weight
+                if($outputUnit->system == 1){
+                    // Input needs converted from grams to oz
+                    $ingredient->ap_small_price /= 0.0352739619;
+                    $inputUnit->system = 1;
+                    $inputUnit->id = 1;
+                    $inputUnit->name = 'oz';
+                } else {
+                    // Input needs converted from oz to gram
+                    $ingredient->ap_small_price *= 0.0352739619;
+                    $inputUnit->system = 3;
+                    $inputUnit->id = 3;
+                    $inputUnit->name = 'gram';
+                }
+            } else {
+                // We're dealing with volume
+                if($outputUnit->system == 1){
+                    // Input needs converted from mL to fl-oz
+                    $ingredient->ap_small_price /= 0.033814;
+                    $inputUnit->system = 1;
+                    $inputUnit->id = 2;
+                    $inputUnit->name = 'fl oz';
+                } else {
+                    // Input needs converted from fl-oz to mL
+                    $ingredient->ap_small_price *= 0.033814;
+                    $inputUnit->system = 3;
+                    $inputUnit->id = 4;
+                    $inputUnit->name = 'ml';
+                }
+            }
+        }
+
+        // If input and output are in the same measurement system, and the same type, apply factor and
+        // return. Previous functions should have converted everything already, the if statement is a
+        // double check.  TODO: change dump to error after weight <-> volume implimented.
+        if($inputUnit->system == $outputUnit->system && $inputUnit->weight == $outputUnit->weight){
+            return $ingredient->ap_small_price * $outputUnit->factor * $quantity;
+        } else {
+            die(dump($ingredient, $inputUnit, $outputUnit, $quantity));
         }
     }
 
+    /**
+     * Returns total cost of ingredients in a recipe
+     *
+     * @param $recipe
+     * @return int
+     */
     public static function CalcRecipeCost($recipe){
         $elements = RecipeElement::where('recipe', '=', $recipe)->get();
         $recipe = new \stdClass();
@@ -73,6 +118,12 @@ class Math {
         return $recipe->cost;
     }
 
+    /**
+     * Returns recipe cost percentage by dividing cost of ingredients by menu price.
+     *
+     * @param $recipeID
+     * @return string
+     */
     public static function CalcRecipeCostPercent($recipeID){
         $recipe = Recipe::find($recipeID);
         $recipe->cost = Math::CalcRecipeCost($recipeID);
@@ -106,7 +157,7 @@ class Math {
             case ($units->system == 3 && $units->weight == 1):
                 $SmallUnit = 3;
                 break;
-            //General, Return NULL
+            //General, Return same
             default:
                 $SmallUnit = $ap_unit;
                 break;
