@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Classes;
+use App\Conversion;
 use App\MasterList;
 use App\Recipe;
 use App\RecipeElement;
@@ -28,7 +29,7 @@ class Math {
     }
 
     /**
-     * Returns the ingredient cost.
+     * Returns the ingredient cost. Input is the master_list details, Output is requested details.
      *
      * @param $master_list
      * @param $quantity
@@ -47,6 +48,19 @@ class Math {
         // by quantity and return.
         if($inputUnit->id == $outputUnit->id){
             return $ingredient->ap_small_price * $quantity;
+        }
+
+        // If a weight-volume conversion is required, but not set up, return -1
+        if($inputUnit->weight != $outputUnit->weight){
+            $conversion = Conversion::where('master_list', '=', $master_list)->first();
+            if(count($conversion) > 0){
+                // Calculate Conversion
+                return 0;
+            } else {
+                // Tell user that there is no conversion programmed.
+                return -1;
+            }
+
         }
 
         // If input and output are different systems, but same type, convert input to output system,
@@ -88,7 +102,7 @@ class Math {
 
         // If input and output are in the same measurement system, and the same type, apply factor and
         // return. Previous functions should have converted everything already, the if statement is a
-        // double check.  TODO: change dump to error after weight <-> volume implimented.
+        // double check.  TODO: change dump to error after weight <-> volume implemented.
         if($inputUnit->system == $outputUnit->system && $inputUnit->weight == $outputUnit->weight){
             return $ingredient->ap_small_price * $outputUnit->factor * $quantity;
         } else {
@@ -105,15 +119,19 @@ class Math {
     public static function CalcRecipeCost($recipe){
         $elements = RecipeElement::where('recipe', '=', $recipe)->get();
         $recipe = new \stdClass();
+        $ingredient = new \stdClass();
         $recipe->cost = 0;
 
         // Cycle through each ingredient, calculate cost, and add to the total cost;
         foreach ($elements as $element){
-            $recipe->cost += Math::CalcIngredientCost(
+            $ingredient->cost = Math::CalcIngredientCost(
                 $element->master_list,
                 $element->quantity,
                 $element->unit
             );
+            if($ingredient->cost != -1){
+                $recipe->cost += $ingredient->cost;
+            }
         }
         return $recipe->cost;
     }

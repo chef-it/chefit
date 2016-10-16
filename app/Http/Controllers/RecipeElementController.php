@@ -48,7 +48,12 @@ class RecipeElementController extends Controller
                 $element->quantity,
                 $element->unit
             );
-            $element->cost = number_format($element->cost, 2);
+
+            if($element->cost == -1){
+                $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list], ['class' => 'btn btn-danger btn-block']);
+            } else {
+                $element->cost = number_format($element->cost, 2);
+            }
         }
 
         return view('recipes.elements.index')
