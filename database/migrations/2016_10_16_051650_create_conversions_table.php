@@ -16,9 +16,9 @@ class CreateConversionsTable extends Migration
         Schema::create('conversions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('master_list', false, true);
-            $table->integer('left_quantity', false, true);
+            $table->decimal('left_quantity', 10 , 6);
             $table->integer('left_unit', false, true);
-            $table->integer('right_quantity', false, true);
+            $table->decimal('right_quantity', 10, 6);
             $table->integer('right_unit', false, true);
             $table->integer('owner', false, true);
             $table->timestamps();

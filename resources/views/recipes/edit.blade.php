@@ -39,7 +39,7 @@
                 {{ Form::checkbox('component_only', '1') }}
             </div>
             <div class="form-group col-md-12 setmyheight">
-                {{ Form::submit('Add', array('class' => 'btn btn-success btn-lg btn-block')) }}
+                {{ Form::submit('Update', array('class' => 'btn btn-success btn-lg btn-block')) }}
                 {{ Form::close() }}
                 <a href="/recipes" class="btn btn-danger btn-lg btn-block"><< Back</a>
             </div>

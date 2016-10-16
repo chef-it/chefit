@@ -1,5 +1,5 @@
 <?php
-use App\Units;
+use App\Unit;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,8 +29,8 @@ Route::get('testing', function(){
     $testing = array();
     while($i < 17){
         $test = Math::GetApSmallUnit($i);
-        $first = Units::find($i);
-        $second = Units::find($test);
+        $first = Unit::find($i);
+        $second = Unit::find($test);
         $testing[$first->name] = $second->name;
         $i++;
     }

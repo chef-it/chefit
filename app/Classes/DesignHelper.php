@@ -3,7 +3,7 @@
 namespace App\Classes;
 use App\MasterList;
 use Illuminate\Support\Facades\DB;
-use App\Units;
+use App\Unit;
 use Auth;
 
 class DesignHelper{
@@ -13,7 +13,7 @@ class DesignHelper{
      * @return array
      */
     public static function UnitsDropDown(){
-        $units = Units::orderBy('system', 'DESC')->orderby('order')->get();
+        $units = Unit::orderBy('system', 'DESC')->orderby('order')->get();
         $select = array();
 
         foreach($units as $unit){

@@ -6,7 +6,7 @@ use App\MasterList;
 use App\Recipe;
 use App\RecipeElement;
 use Illuminate\Support\Facades\DB;
-use App\Units;
+use App\Unit;
 use Auth;
 
 /**
@@ -40,24 +40,34 @@ class Math {
         // Get master_list record
         $ingredient = MasterList::find($master_list);
         // Get units record for master_list small unit
-        $inputUnit = Units::find(Math::GetApSmallUnit($ingredient->ap_unit));
+        $inputUnit = Unit::find(Math::GetApSmallUnit($ingredient->ap_unit));
         // Get units record for $unit
-        $outputUnit = Units::find($unit);
+        $outputUnit = Unit::find($unit);
 
-        // If input and output are the same, the ingredient is at the small price already, just multiply
-        // by quantity and return.
-        if($inputUnit->id == $outputUnit->id){
-            return $ingredient->ap_small_price * $quantity;
-        }
-
-        // If a weight-volume conversion is required, but not set up, return -1
-        if($inputUnit->weight != $outputUnit->weight){
-            $conversion = Conversion::where('master_list', '=', $master_list)->first();
-            if(count($conversion) > 0){
+        // If a weight-volume conversion is required
+        if ($inputUnit->weight != $outputUnit->weight){
+            // Get conversion from database with measurement unit details included.
+            $conversion = Conversion::with('leftUnit', 'rightUnit')
+                ->where('master_list', '=', $master_list)
+                ->first();
+            if (count($conversion)){
+                $conversionFactor = $conversion->right_quantity / $conversion->left_quantity;
                 // Calculate Conversion
-                return 0;
+                if ($inputUnit->system == $conversion->leftUnit->system && $inputUnit->weight == $conversion->leftUnit->weight){
+                    $ingredient->ap_small_price /= $conversionFactor * $conversion->rightUnit->factor;
+                    $inputUnit = $conversion->rightUnit;
+                } elseif ($inputUnit->system == $conversion->rightUnit->system && $inputUnit->weight == $conversion->rightUnit->weight){
+                    $ingredient->ap_small_price *= $conversionFactor / $conversion->leftUnit->factor;
+                    $inputUnit = $conversion->leftUnit;
+                } else {
+                    // Return -1 to trigger button on recipes.elements.index letting the user know the conversion
+                    // set up doesn't account for measurements entered into to recipe ingredient.
+                    return -1;
+                }
+                $pause = 2;
             } else {
-                // Tell user that there is no conversion programmed.
+                // Return -1 to trigger button on recipes.elements.index letting the user know there isn't a conversion
+                // set up.
                 return -1;
             }
 
@@ -65,9 +75,9 @@ class Math {
 
         // If input and output are different systems, but same type, convert input to output system,
         // modify the ingredient price to reflect new change, and continue on.
-        if($inputUnit->system != $outputUnit->system && $inputUnit->weight == $outputUnit->weight){
+        if ($inputUnit->system != $outputUnit->system && $inputUnit->weight == $outputUnit->weight){
 
-            if($inputUnit->weight == 1){
+            if ($inputUnit->weight == 1){
                 // We're dealing with weight
                 if($outputUnit->system == 1){
                     // Input needs converted from grams to oz
@@ -106,7 +116,7 @@ class Math {
         if($inputUnit->system == $outputUnit->system && $inputUnit->weight == $outputUnit->weight){
             return $ingredient->ap_small_price * $outputUnit->factor * $quantity;
         } else {
-            die(dump($ingredient, $inputUnit, $outputUnit, $quantity));
+            die(dump('Let Dale know this shouldn\'t have happened'));
         }
     }
 

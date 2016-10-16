@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Units;
+use App\Unit;
 use Illuminate\Http\Request;
 use App\MasterList;
 use App\Classes\Math;
