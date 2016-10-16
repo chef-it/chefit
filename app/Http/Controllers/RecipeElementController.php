@@ -14,6 +14,15 @@ use App\Http\Requests;
 class RecipeElementController extends Controller
 {
     /**
+     * Instantiate a new MasterListController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('ownership', ['only' => ['edit', 'update', 'destroy']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

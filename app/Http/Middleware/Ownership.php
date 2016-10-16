@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\MasterList;
 use App\Recipe;
+use App\RecipeElement;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,14 @@ class Ownership
 
                 if ($recipes->owner != Auth::user()->id){
                     return redirect()->route('recipes.index');
+                }
+
+                if (isset($routeName[1]) && $routeName[1] == 'element'){
+                    $elements = RecipeElement::find($id['element']);
+                    if ($elements->owner != Auth::user()->id){
+                        return redirect()->route('recipes.index');
+                    }
+
                 }
                 return $next($request);
             default:
