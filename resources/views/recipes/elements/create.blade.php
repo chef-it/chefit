@@ -15,19 +15,16 @@
         <div class="panel-body">
             {!! Form::open(['route' => ['recipes.elements.store', Request::segment(2)]]) !!}
             {{ Form::hidden('recipe', Request::segment(2)) }}
-            <div class="form-group col-md-3 setmyheight">
+            <div class="form-group col-md-3 col-md-offset-3">
                 {{ Form::label('master_list', 'Ingredient: ') }}
                 {{ Form::select('master_list', $ingredients, null, array('class' => 'form-control')) }}
             </div>
-            <div class="form-group col-md-3 setmyheight">
+            <div class="form-group col-md-3">
                 {{ Form::label('quantity', 'Quantity: ') }}
                 {{ Form::text('quantity', null, array('class' => 'form-control')) }}
-            </div>
-            <div class="form-group col-md-3 setmyheight">
-                {{ Form::label('unit', 'Unit: ') }}
                 {{ Form::select('unit', $units, null, array('class' => 'form-control')) }}
             </div>
-            <div class="form-group col-md-12 setmyheight">
+            <div class="form-group col-md-6 col-md-offset-3">
                 {{ Form::submit('Add', array('class' => 'btn btn-success btn-lg btn-block')) }}
                 {{ Form::close() }}
                 <a href="{{ URL::previous() }}" class="btn btn-danger btn-lg btn-block"><< Back</a>

@@ -20,24 +20,27 @@
                     <tr>
                         <th class="col-md-4" data-priority="1">Ingredient</th>
                         <th class="col-md-1">Quantity</th>
-                        <th class="col-md-1">Unit</th>
-                        <th class="col-md-1">Cost</th>
-                        <th class="col-md-1"></th>
-                        <th class="col-md-1"></th>
+                        <th class="col-md-1" data-priority="1">Cost</th>
+                        <th class="col-md-2"></th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($elements as $element)
                         <tr>
                             <td>{{ $element->name }}</td>
-                            <td>{{ $element->quantity }}</td>
-                            <td>{{ $element->unit_name }}</td>
+                            <td>{{ $element->quantity }} {{ $element->unit_name }}</td>
                             <td>{{ $element->cost }}</td>
-                            <td>{{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe, $element->id], ['class' => 'btn btn-info btn-block']) }}</td>
                             <td>
-                                {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe, $element->id], 'method' => 'DELETE']) !!}
-                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}
-                                {!! Form::close() !!}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe, $element->id], ['class' => 'btn btn-info btn-block']) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe, $element->id], 'method' => 'DELETE']) !!}
+                                        {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}
+                                        {!! Form::close() !!}
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

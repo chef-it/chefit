@@ -17,17 +17,17 @@
             <div class="content">
                 {!! Form::model($conversion, ['method' => 'PUT', 'route' => ['masterlist.conversions.update', $conversion->master_list, $conversion->id]]) !!}
                 {{ Form::hidden('recipe', Request::segment(2)) }}
-                <div class="form-group col-md-3 setmyheight">
+                <div class="form-group col-md-3 col-md-offset-3">
                     {{ Form::label('left', 'Measurement One: ') }}
                     {{ Form::text('left_quantity', null, array('class' => 'form-control', 'autocomplete' => 'off')) }}
                     {{ Form::select('left_unit', $units, null, array('class' => 'form-control')) }}
                 </div>
-                <div class="form-group col-md-3 setmyheight">
+                <div class="form-group col-md-3">
                     {{ Form::label('right', 'Measurement Two: ') }}
                     {{ Form::text('right_quantity', null, array('class' => 'form-control', 'autocomplete' => 'off')) }}
                     {{ Form::select('right_unit', $units, null, array('class' => 'form-control')) }}
                 </div>
-                <div class="form-group col-md-12 setmyheight">
+                <div class="form-group col-md-6 col-md-offset-3">
                     {{ Form::submit('Update', array('class' => 'btn btn-success btn-lg btn-block')) }}
                     {{ Form::close() }}
                     <a href="/masterlist" class="btn btn-danger btn-lg btn-block"><< Back</a>
