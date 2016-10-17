@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Http\Middleware;
+namespace App\Http\Middleware;
 
 use App\MasterList;
 use App\Recipe;
@@ -26,6 +26,8 @@ class Ownership
          */
         $id = $request->route()->parameters();
         $routeName = $request->route()->parameterNames();
+
+        $pause = 1;
         
         switch ($routeName[0]) {
             case 'masterlist':

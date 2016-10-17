@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Classes;
+namespace App\Classes;
 
 use App\MasterList;
 use Illuminate\Support\Facades\DB;

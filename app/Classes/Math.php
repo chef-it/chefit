@@ -1,5 +1,5 @@
 <?php
-namespace app\Classes;
+namespace App\Classes;
 
 use App\Conversion;
 use App\MasterList;
