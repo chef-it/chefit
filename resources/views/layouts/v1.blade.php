@@ -45,9 +45,9 @@ if ($_SESSION["loggedin"] != "yes") {
         <?php $design->userOptions(); ?>
         <div class="cl-mcont" id="contentBox">
             <?php
-            if(isset($_POST['updatePrefs'])){
+            if (isset($_POST['updatePrefs'])) {
                 $home->updatePrefs();
-            } elseif (isset($_POST['feedback'])){
+            } elseif (isset($_POST['feedback'])) {
                 $home->saveFeedback();
             }
             ?>

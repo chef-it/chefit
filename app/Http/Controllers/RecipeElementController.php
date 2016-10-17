@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace app\Http\Controllers;
 
 use App\Classes\Math;
 use App\Classes\DesignHelper;
@@ -38,10 +38,10 @@ class RecipeElementController extends Controller
             ->join('master_list', 'recipe_elements.master_list', '=', 'master_list.id')
             // Join unit name
             ->join('units', 'recipe_elements.unit', '=', 'units.id')
-            ->where('recipe','=', $recipeId)
+            ->where('recipe', '=', $recipeId)
             ->get();
 
-        foreach($elements as $element){
+        foreach ($elements as $element) {
             $element->quantity = $element->quantity + 0;
             $element->cost = Math::CalcIngredientCost(
                 $element->master_list,
@@ -49,7 +49,7 @@ class RecipeElementController extends Controller
                 $element->unit
             );
 
-            if($element->cost == -1){
+            if ($element->cost == -1) {
                 $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list], ['class' => 'btn btn-danger btn-block']);
             } else {
                 $element->cost = number_format($element->cost, 2);

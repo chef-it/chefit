@@ -16,11 +16,11 @@ class CreateMasterList extends Migration
         Schema::create('master_list', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->decimal('price',5,2);
-            $table->decimal('ap_quantity',5,2);
+            $table->decimal('price', 5, 2);
+            $table->decimal('ap_quantity', 5, 2);
             $table->integer('ap_unit', false, true);
-            $table->decimal('yield',10,6);
-            $table->decimal('ap_small_price',10,6);
+            $table->decimal('yield', 10, 6);
+            $table->decimal('ap_small_price', 10, 6);
             $table->json('data');
             $table->integer('owner', false, true);
             $table->timestamps();

@@ -1,8 +1,13 @@
 <?php
 
-namespace App\Facades;
+namespace app\Facades;
+
 use Illuminate\Support\Facades\Facade;
 
-class Math extends Facade{
-    protected static function getFacadeAccessor() { return 'Math'; }
+class Math extends Facade
+{
+    protected static function getFacadeAccessor()
+    {
+        return 'Math';
+    }
 }

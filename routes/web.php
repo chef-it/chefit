@@ -1,5 +1,6 @@
 <?php
 use App\Unit;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,10 +25,10 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index');
 
-Route::get('testing', function(){
+Route::get('testing', function () {
     $i=1;
     $testing = array();
-    while($i < 17){
+    while ($i < 17) {
         $test = Math::GetApSmallUnit($i);
         $first = Unit::find($i);
         $second = Unit::find($test);

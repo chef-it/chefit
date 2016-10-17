@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace app\Http\Controllers;
 
 use App\Recipe;
 use App\RecipeElement;
@@ -67,7 +67,7 @@ class RecipeController extends Controller
         $recipe->portions_per_batch = $request->portions_per_batch;
         $recipe->batch_quantity = $request->batch_quantity;
         $recipe->batch_unit = $request->batch_unit;
-        if ($request->component_only == NULL){
+        if ($request->component_only == null) {
             $recipe->component_only = 0;
         } else {
             $recipe->component_only = $request->component_only;
@@ -123,7 +123,7 @@ class RecipeController extends Controller
         $recipe->portions_per_batch = $request->portions_per_batch;
         $recipe->batch_quantity = $request->batch_quantity;
         $recipe->batch_unit = $request->batch_unit;
-        if ($request->component_only == NULL){
+        if ($request->component_only == null) {
             $recipe->component_only = 0;
         } else {
             $recipe->component_only = $request->component_only;

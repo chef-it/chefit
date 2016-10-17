@@ -19,7 +19,7 @@ class UnitsTable extends Migration
             $table->integer('system');
             $table->integer('weight');
             $table->integer('order');
-            $table->decimal('factor',10,6);
+            $table->decimal('factor', 10, 6);
         });
     }
 

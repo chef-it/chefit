@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace app\Http\Middleware;
 
 use App\MasterList;
 use App\Recipe;
@@ -27,31 +27,30 @@ class Ownership
         $id = $request->route()->parameters();
         $routeName = $request->route()->parameterNames();
         
-        switch($routeName[0]){
+        switch ($routeName[0]) {
             case 'masterlist':
                 $masterlist = MasterList::find($id['masterlist']);
 
-                if ($masterlist->owner != Auth::user()->id){
+                if ($masterlist->owner != Auth::user()->id) {
                     return redirect()->route('masterlist.index');
                 }
                 return $next($request);
             case 'recipe':
                 $recipes = Recipe::find($id['recipe']);
 
-                if ($recipes->owner != Auth::user()->id){
+                if ($recipes->owner != Auth::user()->id) {
                     return redirect()->route('recipes.index');
                 }
 
-                if (isset($routeName[1]) && $routeName[1] == 'element'){
+                if (isset($routeName[1]) && $routeName[1] == 'element') {
                     $elements = RecipeElement::find($id['element']);
-                    if ($elements->owner != Auth::user()->id){
+                    if ($elements->owner != Auth::user()->id) {
                         return redirect()->route('recipes.index');
                     }
-
                 }
                 return $next($request);
             default:
                 return redirect('/');
-        }        
+        }
     }
 }

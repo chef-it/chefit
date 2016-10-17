@@ -1,23 +1,26 @@
 <?php
 
-namespace App\Classes;
+namespace app\Classes;
+
 use App\MasterList;
 use Illuminate\Support\Facades\DB;
 use App\Unit;
 use Auth;
 
-class DesignHelper{
+class DesignHelper
+{
     /**
      * Creates array to pass to Blade Form::Select of all measurement units.
      *
      * @return array
      */
-    public static function UnitsDropDown(){
+    public static function UnitsDropDown()
+    {
         $units = Unit::orderBy('system', 'DESC')->orderby('order')->get();
         $select = array();
 
-        foreach($units as $unit){
-            switch($unit->system){
+        foreach ($units as $unit) {
+            switch ($unit->system) {
                 case 1:
                     $unit->system = "US System";
                     break;
@@ -39,12 +42,13 @@ class DesignHelper{
      *
      * @return array
      */
-    public static function IngredientsDropDown(){
+    public static function IngredientsDropDown()
+    {
         $ingredients = MasterList::select('id', 'name')
             ->where('owner', '=', Auth::user()->id)
             ->orderBy('name')->get();
 
-        foreach($ingredients as $ingredient){
+        foreach ($ingredients as $ingredient) {
             $select[$ingredient->id] = $ingredient->name;
         }
 

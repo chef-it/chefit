@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace app\Http\Controllers;
 
 use App\Classes\DesignHelper;
 use App\Classes\Math;
@@ -23,7 +23,7 @@ class ConversionController extends Controller
     {
         $conversion = Conversion::where('master_list', '=', $id)->first();
 
-        if (count($conversion) > 0){
+        if (count($conversion) > 0) {
             return redirect()->route(
                 'masterlist.conversions.edit',
                 ['masterlist' => $id, 'conversion' => $conversion->id]
@@ -33,7 +33,6 @@ class ConversionController extends Controller
                 'ConversionController@create', ['id' => $id]
             );
         }
-
     }
 
     /**

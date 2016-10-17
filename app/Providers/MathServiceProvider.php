@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace app\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -23,8 +23,7 @@ class MathServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['Math'] = $this->app->share(function($app)
-        {
+        $this->app['Math'] = $this->app->share(function ($app) {
             return new \App\Classes\Math;
         });
     }
