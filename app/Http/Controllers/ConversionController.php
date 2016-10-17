@@ -14,6 +14,16 @@ use App\Http\Requests;
 
 class ConversionController extends Controller
 {
+
+    /**
+     * Instantiate a new MasterListController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('ownership');
+    }
+
     /**
      * Display a listing of the resource.
      *
