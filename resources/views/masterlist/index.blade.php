@@ -1,4 +1,4 @@
-@extends('layouts.bs')
+@extends('layouts.app')
 
 @section('title', '| Master List')
 
@@ -8,47 +8,49 @@
 @endsection
 
 @section('content')
-    <div id="list" class="col-md-12">
-        <div class="block-flat">
-            <div class="header">
-                <h3 class="text-center">Master List</h3>
-                <hr>
-            </div>
-            <div class="content">
-                <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
-                    <thead>
-                        <tr>
-                            <th class="col-md-6" data-priority="1">Name</th>
-                            <th class="col-md-1">Price</th>
-                            <th class="col-md-1">AP Quantity</th>
-                            <th class="col-md-1">AP Unit</th>
-                            <th class="col-md-1">Yield</th>
-                            <th class="col-md-1" data-priority="2"></th>
-                            <th class="col-md-1" data-priority="2"></th>
-                            <th class="col-md-1" data-priority="2"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($masterlist as $table)
+    <div class="container">
+        <div id="list" class="col-md-12">
+            <div class="block-flat">
+                <div class="header">
+                    <h3 class="text-center">Master List</h3>
+                    <hr>
+                </div>
+                <div class="content">
+                    <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
+                        <thead>
                             <tr>
-                                <td>{{ $table->name }}</td>
-                                <td>{{ $table->price }}</td>
-                                <td>{{ $table->ap_quantity }}</td>
-                                <td>{{ $table->ap_unit }}</td>
-                                <td>{{ $table->yield }}</td>
-                                <td>{{ link_to_route('masterlist.conversions.index', 'Conversion', [$table->id], ['class' => 'btn btn-info btn-block']) }}</td>
-                                <td>{{ link_to_route('masterlist.edit', 'Edit', [$table->id], ['class' => 'btn btn-info btn-block']) }}</td>
-                                <td>
-                                    {!! Form::open(['route' => ['masterlist.destroy', $table->id], 'method' => 'DELETE']) !!}
-                                        {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}
-                                    {!! Form::close() !!}
-                                </td>
+                                <th class="col-md-6" data-priority="1">Name</th>
+                                <th class="col-md-1">Price</th>
+                                <th class="col-md-1">AP Quantity</th>
+                                <th class="col-md-1">AP Unit</th>
+                                <th class="col-md-1">Yield</th>
+                                <th class="col-md-1" data-priority="2"></th>
+                                <th class="col-md-1" data-priority="2"></th>
+                                <th class="col-md-1" data-priority="2"></th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($masterlist as $table)
+                                <tr>
+                                    <td>{{ $table->name }}</td>
+                                    <td>{{ $table->price }}</td>
+                                    <td>{{ $table->ap_quantity }}</td>
+                                    <td>{{ $table->ap_unit }}</td>
+                                    <td>{{ $table->yield }}</td>
+                                    <td>{{ link_to_route('masterlist.conversions.index', 'Conversion', [$table->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
+                                    <td>{{ link_to_route('masterlist.edit', 'Edit', [$table->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
+                                    <td>
+                                        {!! Form::open(['route' => ['masterlist.destroy', $table->id], 'method' => 'DELETE']) !!}
+                                            {!! Form::submit('Delete', ['class' => 'btn btn-xs btn-danger btn-block']) !!}
+                                        {!! Form::close() !!}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <a href="/masterlist/create" class="btn btn-success btn-block" style="margin-top: 1em">Add New Item</a>
             </div>
-            <a href="/masterlist/create" class="btn btn-success btn-lg btn-block" style="margin-top: 1em">Add New Item</a>
         </div>
     </div>
 @endsection

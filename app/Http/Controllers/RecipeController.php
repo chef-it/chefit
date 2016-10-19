@@ -46,7 +46,9 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        return view('recipes.create')->withUnits(DesignHelper::UnitsDropDown());
+        return view('recipes.create')
+            ->withUnits(DesignHelper::UnitsDropDown())
+            ->withOptions(DesignHelper::RecipeOptionsDropDown());
     }
 
     /**
@@ -101,7 +103,10 @@ class RecipeController extends Controller
         $recipe = Recipe::find($id);
         $recipe->portions_per_batch = $recipe->portions_per_batch + 0;
         $recipe->batch_quantity = $recipe->batch_quantity + 0;
-        return view('recipes.edit')->withRecipe($recipe)->withUnits(DesignHelper::UnitsDropDown());
+        return view('recipes.edit')
+            ->withRecipe($recipe)
+            ->withUnits(DesignHelper::UnitsDropDown())
+            ->withOptions(DesignHelper::RecipeOptionsDropDown());
     }
 
     /**

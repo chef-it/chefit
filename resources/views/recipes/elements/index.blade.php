@@ -1,4 +1,4 @@
-@extends('layouts.bs')
+@extends('layouts.app')
 
 @section('title', '| Recipes')
 
@@ -8,46 +8,48 @@
 @endsection
 
 @section('content')
-    <div id="MasterList" class="col-md-12">
-        <div class="block-flat">
-            <div class="header">
-                <h3 class="text-center">{{ $recipe->name }}</h3>
-                <hr>
-            </div>
-            <div class="content">
-                <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="col-md-4" data-priority="1">Ingredient</th>
-                        <th class="col-md-1">Quantity</th>
-                        <th class="col-md-1" data-priority="1">Cost</th>
-                        <th class="col-md-2"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($elements as $element)
+    <div class="container">
+        <div id="MasterList" class="col-md-12">
+            <div class="block-flat">
+                <div class="header">
+                    <h3 class="text-center">{{ $recipe->name }}</h3>
+                    <hr>
+                </div>
+                <div class="content">
+                    <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
+                        <thead>
                         <tr>
-                            <td>{{ $element->name }}</td>
-                            <td>{{ $element->quantity }} {{ $element->unit_name }}</td>
-                            <td>{{ $element->cost }}</td>
-                            <td>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe, $element->id], ['class' => 'btn btn-info btn-block']) }}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe, $element->id], 'method' => 'DELETE']) !!}
-                                        {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}
-                                        {!! Form::close() !!}
-                                    </div>
-                                </div>
-                            </td>
+                            <th class="col-md-4" data-priority="1">Ingredient</th>
+                            <th class="col-md-1">Quantity</th>
+                            <th class="col-md-1" data-priority="1">Cost</th>
+                            <th class="col-md-2"></th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        @foreach($elements as $element)
+                            <tr>
+                                <td>{{ $element->name }}</td>
+                                <td>{{ $element->quantity }} {{ $element->unit_name }}</td>
+                                <td>{{ $element->cost }}</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe, $element->id], ['class' => 'btn btn-xs btn-info btn-block']) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe, $element->id], 'method' => 'DELETE']) !!}
+                                            {!! Form::submit('Delete', ['class' => 'btn btn-xs btn-danger btn-block']) !!}
+                                            {!! Form::close() !!}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                {{ link_to_route('recipes.elements.create', 'Add New Element', [Request::segment(2)], ['class' => 'btn btn-success btn-block']) }}
             </div>
-            {{ link_to_route('recipes.elements.create', 'Add New Element', [Request::segment(2)], ['class' => 'btn btn-success btn-lg btn-block']) }}
         </div>
     </div>
 @endsection

@@ -1,0 +1,22 @@
+.panel-grey {
+    border-color: #404040
+}
+
+.panel-grey > .panel-heading {
+    color: #ffffff;
+    background-color: #404040;
+    border-color: #404040
+}
+
+.panel-grey > .panel-heading + .panel-collapse > .panel-body {
+    border-top-color: #404040
+}
+
+.panel-grey > .panel-heading .badge {
+    color: #404040;
+    background-color: #ffffff
+}
+
+.panel-grey > .panel-footer + .panel-collapse > .panel-body {
+    border-bottom-color: #404040
+}

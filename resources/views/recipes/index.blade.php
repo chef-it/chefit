@@ -1,4 +1,4 @@
-@extends('layouts.bs')
+@extends('layouts.app')
 
 @section('title', '| Recipes')
 
@@ -8,48 +8,50 @@
 @endsection
 
 @section('content')
-    <div id="MasterList" class="col-md-12">
-        <div class="block-flat">
-            <div class="header">
-                <h3 class="text-center">Recipes</h3>
-                <hr>
-            </div>
-            <div class="content">
-                <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="col-md-4" data-priority="1">Name</th>
-                        <th class="col-md-1">Price</th>
-                        <th class="col-md-1">Costing %</th>
-                        <th class="col-md-1"></th>
-                        <th class="col-md-1"></th>
-                        <th class="col-md-1"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($recipes as $recipe)
+    <div class="container">
+        <div id="MasterList" class="col-md-12">
+            <div class="block-flat">
+                <div class="header">
+                    <h3 class="text-center">Recipes</h3>
+                    <hr>
+                </div>
+                <div class="content">
+                    <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
+                        <thead>
                         <tr>
-                            <td>{{ $recipe->name }}</td>
-                            @if ($recipe->component_only == 1)
-                                <td>Component</td>
-                                <td>Component</td>
-                            @else
-                                <td>{{ $recipe->menu_price }}</td>
-                                <td>{{ $recipe->costPercent }}</td>
-                            @endif
-                            <td>{{ link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-info btn-block']) }}</td>
-                            <td>{{ link_to_route('recipes.elements.index', 'View', [$recipe->id], ['class' => 'btn btn-primary btn-block']) }}</td>
-                            <td>
-                                {!! Form::open(['route' => ['recipes.destroy', $recipe->id], 'method' => 'DELETE']) !!}
-                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-block']) !!}
-                                {!! Form::close() !!}
-                            </td>
+                            <th class="col-md-4" data-priority="1">Name</th>
+                            <th class="col-md-1">Price</th>
+                            <th class="col-md-1">Costing %</th>
+                            <th class="col-md-1"></th>
+                            <th class="col-md-1"></th>
+                            <th class="col-md-1"></th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        @foreach($recipes as $recipe)
+                            <tr>
+                                <td>{{ $recipe->name }}</td>
+                                @if ($recipe->component_only == 1)
+                                    <td>Component</td>
+                                    <td>Component</td>
+                                @else
+                                    <td>{{ $recipe->menu_price }}</td>
+                                    <td>{{ $recipe->costPercent }}</td>
+                                @endif
+                                <td>{{ link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
+                                <td>{{ link_to_route('recipes.elements.index', 'View', [$recipe->id], ['class' => 'btn btn-xs btn-primary btn-block']) }}</td>
+                                <td>
+                                    {!! Form::open(['route' => ['recipes.destroy', $recipe->id], 'method' => 'DELETE']) !!}
+                                    {!! Form::submit('Delete', ['class' => 'btn btn-xs btn-danger btn-block']) !!}
+                                    {!! Form::close() !!}
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <a href="/recipes/create" class="btn btn-success btn-block" style="margin-top: 1em">Add New Item</a>
             </div>
-            <a href="/recipes/create" class="btn btn-success btn-lg btn-block" style="margin-top: 1em">Add New Item</a>
         </div>
     </div>
 @endsection

@@ -9,6 +9,14 @@ use Auth;
 
 class DesignHelper
 {
+
+    public static function RecipeOptionsDropDown()
+    {
+        $select[0] = 'No';
+        $select[1] = 'Yes';
+        return $select;
+    }
+
     /**
      * Creates array to pass to Blade Form::Select of all measurement units.
      *
@@ -16,7 +24,7 @@ class DesignHelper
      */
     public static function UnitsDropDown()
     {
-        $units = Unit::orderBy('system', 'DESC')->orderby('order')->get();
+        $units = Unit::orderBy('system')->orderby('order')->get();
         $select = array();
 
         foreach ($units as $unit) {

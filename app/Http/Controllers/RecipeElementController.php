@@ -50,7 +50,7 @@ class RecipeElementController extends Controller
             );
 
             if ($element->cost == -1) {
-                $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list], ['class' => 'btn btn-danger btn-block']);
+                $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list], ['class' => 'btn btn-xs btn-danger btn-block']);
             } else {
                 $element->cost = number_format($element->cost, 2);
             }
