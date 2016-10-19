@@ -9,7 +9,6 @@ use Auth;
 
 class DesignHelper
 {
-
     public static function RecipeOptionsDropDown()
     {
         $select[0] = 'No';
