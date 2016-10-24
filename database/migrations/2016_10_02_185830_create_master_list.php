@@ -21,7 +21,6 @@ class CreateMasterList extends Migration
             $table->integer('ap_unit', false, true);
             $table->decimal('yield', 10, 6);
             $table->decimal('ap_small_price', 10, 6);
-            $table->json('data');
             $table->integer('owner', false, true);
             $table->timestamps();
             $table->foreign('ap_unit')
