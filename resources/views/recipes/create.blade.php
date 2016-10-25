@@ -48,7 +48,7 @@
                             <a href="/recipes" class="btn btn-danger btn-block"><< Back</a>
                         </div>
                         <div class="col-md-6">
-                            {{ Form::submit('Update', array('class' => 'btn btn-success btn-block')) }}
+                            {{ Form::submit('Create', array('class' => 'btn btn-success btn-block')) }}
                             {{ Form::close() }}
                         </div>
                     </div>

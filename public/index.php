@@ -56,3 +56,11 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
+
+try {
+    $app->run();
+} catch(\Exception $e) {
+    echo "<pre>";
+    echo $e;
+    echo "</pre>";
+}

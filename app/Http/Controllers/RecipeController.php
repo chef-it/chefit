@@ -19,7 +19,7 @@ class RecipeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('ownership', ['except' => ['index', 'create']]);
+        $this->middleware('ownership', ['except' => ['index', 'create', 'store']]);
     }
 
     /**

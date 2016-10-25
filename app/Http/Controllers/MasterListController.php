@@ -21,7 +21,7 @@ class MasterListController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('ownership', ['except' => ['index', 'create']]);
+        $this->middleware('ownership', ['except' => ['index', 'create', 'store']]);
     }
 
     /**
@@ -36,7 +36,8 @@ class MasterListController extends Controller
             ->where('master_list.owner', '=', Auth::user()->id)
             ->orderBy('master_list.name')
             ->get();
-        return view('masterlist.index')->withMasterlist($masterlist);
+        return view('masterlist.index')
+            ->withMasterlist($masterlist);
     }
 
     /**
@@ -46,7 +47,10 @@ class MasterListController extends Controller
      */
     public function create()
     {
-        return view('masterlist.create')->withUnits(DesignHelper::UnitsDropDown());
+        return view('masterlist.create')
+            ->withUnits(DesignHelper::UnitsDropDown())
+            ->withVendors(DesignHelper::VendorsDropDown())
+            ->withCategories(DesignHelper::MasterListCategoriesDropDown());
     }
 
     /**
@@ -68,8 +72,9 @@ class MasterListController extends Controller
         $masterlist->ap_unit = $request->ap_unit;
         $masterlist->yield = $request->yield;
         $masterlist->ap_small_price = Math::CalcApUnitCost($request->price, $request->ap_quantity, $request->ap_unit);
-        $masterlist->data = '[]';
         $masterlist->owner = Auth::user()->id;
+        $masterlist->vendor = $request->input('vendor');
+        $masterlist->category = $request->input('category');
 
         $masterlist->save();
 
@@ -98,7 +103,9 @@ class MasterListController extends Controller
         $masterlist = MasterList::find($id);
         return view('masterlist.edit')
             ->withMasterlist($masterlist)
-            ->withUnits(DesignHelper::UnitsDropDown());
+            ->withUnits(DesignHelper::UnitsDropDown())
+            ->withVendors(DesignHelper::VendorsDropDown())
+            ->withCategories(DesignHelper::MasterListCategoriesDropDown());
     }
 
     /**
@@ -121,6 +128,8 @@ class MasterListController extends Controller
         $masterlist->ap_unit = $request->input('ap_unit');
         $masterlist->yield = $request->input('yield');
         $masterlist->ap_small_price = Math::CalcApUnitCost($request->price, $request->ap_quantity, $request->ap_unit);
+        $masterlist->vendor = $request->input('vendor');
+        $masterlist->category = $request->input('category');
 
         $masterlist->save();
 

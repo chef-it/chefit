@@ -61,4 +61,32 @@ class DesignHelper
 
         return $select;
     }
+
+    public static function VendorsDropDown()
+    {
+        $ingredients = MasterList::distinct()
+            ->select('vendor')
+            ->where('owner', '=', Auth::user()->id)
+            ->get();
+
+        foreach ($ingredients as $ingredient) {
+            $select[$ingredient->vendor] = $ingredient->vendor;
+        }
+
+        return $select;
+    }
+
+    public static function MasterListCategoriesDropDown()
+    {
+        $ingredients = MasterList::distinct()
+            ->select('category')
+            ->where('owner', '=', Auth::user()->id)
+            ->get();
+
+        foreach ($ingredients as $ingredient) {
+            $select[$ingredient->category] = $ingredient->category;
+        }
+
+        return $select;
+    }
 }

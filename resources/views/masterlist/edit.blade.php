@@ -35,6 +35,16 @@
                             {{ Form::select('ap_unit', $units, $masterlist->ap_unit, array('class' => 'form-control')) }}
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            {{ Form::label('vendor', 'Vendor:') }}
+                            {{ Form::select('vendor', $vendors, $masterlist->vendor, array('class' => 'form-control')) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ Form::label('category', 'Category:') }}
+                            {{ Form::select('category', $categories, $masterlist->category, array('class' => 'form-control')) }}
+                        </div>
+                    </div>
                     <hr style="margin-top: 6px">
                     <div class="row">
                         <div class="col-md-6">
@@ -54,8 +64,20 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
     <script>
-        $('select').selectize({
+        $('[name=ap_unit]').selectize({
             selectOnTab: true
+        });
+
+        $('#vendor').selectize({
+            selectOnTab: true,
+            create: true,
+            createOnBlur: true
+        });
+
+        $('#category').selectize({
+            selectOnTab: true,
+            create: true,
+            createOnBlur: true
         });
     </script>
 @endsection
