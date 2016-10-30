@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MasterListPriceTracking;
 use App\Unit;
 use Illuminate\Http\Request;
 use App\MasterList;
@@ -63,6 +64,7 @@ class MasterListController extends Controller
     {
         //Validate
 
+
         //Store
         $masterlist = new MasterList();
 
@@ -77,6 +79,7 @@ class MasterListController extends Controller
         $masterlist->category = $request->input('category');
 
         $masterlist->save();
+
 
         return redirect()->route('masterlist.index');
     }
@@ -122,6 +125,24 @@ class MasterListController extends Controller
         //Store
         $masterlist = MasterList::find($id);
 
+        //Send current price data to price tracking before updating new data if there are any pricing changes
+        if ($masterlist->price != $request->price ||
+            $masterlist->ap_quantity != $request->ap_quantity ||
+            $masterlist->ap_unit != $request->ap_unit
+        ) {
+            $pricetracking = new MasterListPriceTracking();
+
+            $pricetracking->master_list = $id;
+            $pricetracking->owner = Auth::user()->id;
+            $pricetracking->price = $masterlist->price;
+            $pricetracking->ap_quantity = $masterlist->ap_quantity;
+            $pricetracking->ap_unit = $masterlist->ap_unit;
+            $pricetracking->vendor = $masterlist->vendor;
+            $pricetracking->created_at = $masterlist->updated_at;
+
+            $pricetracking->save();
+        }
+
         $masterlist->name = $request->input('name');
         $masterlist->price = $request->input('price');
         $masterlist->ap_quantity = $request->input('ap_quantity');
@@ -132,6 +153,10 @@ class MasterListController extends Controller
         $masterlist->category = $request->input('category');
 
         $masterlist->save();
+
+
+        //Price Tracking
+
 
         //Redirect
         return redirect()->route('masterlist.index');

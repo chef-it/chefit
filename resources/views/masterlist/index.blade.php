@@ -19,13 +19,14 @@
                     <table class="table table-striped table-bordered responsive" id="datatable" width="100%">
                         <thead>
                             <tr>
-                                <th class="col-md-3" data-priority="1">Name</th>
+                                <th class="col-md-2" data-priority="1">Name</th>
                                 <th class="col-md-1">Price</th>
                                 <th class="col-md-1">AP Quantity</th>
                                 <th class="col-md-1">AP Unit</th>
                                 <th class="col-md-1">Yield</th>
                                 <th class="col-md-1">Category</th>
                                 <th class="col-md-1">Vendor</th>
+                                <th class="col-md-1" data-priority="2"></th>
                                 <th class="col-md-1" data-priority="2"></th>
                                 <th class="col-md-1" data-priority="2"></th>
                                 <th class="col-md-1" data-priority="2"></th>
@@ -42,6 +43,7 @@
                                     <td>{{ $table->category }}</td>
                                     <td>{{ $table->vendor }}</td>
                                     <td>{{ link_to_route('masterlist.conversions.index', 'Conversion', [$table->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
+                                    <td>{{ link_to_route('masterlist.pricetracking.index', 'Price History', [$table->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
                                     <td>{{ link_to_route('masterlist.edit', 'Edit', [$table->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
                                     <td>
                                         {!! Form::open(['route' => ['masterlist.destroy', $table->id], 'method' => 'DELETE']) !!}

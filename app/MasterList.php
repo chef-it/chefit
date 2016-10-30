@@ -8,8 +8,13 @@ class MasterList extends Model
 {
     protected $table = 'master_list';
 
-    public function conversion()
+    public function priceTracking()
     {
-        $this->hasOne('Conversion');
+        return $this->hasMany('App\MasterListPriceTracking', 'master_list', 'id');
+    }
+    
+    public function unit()
+    {
+        return $this->hasOne('App\Unit', 'id', 'ap_unit');
     }
 }
