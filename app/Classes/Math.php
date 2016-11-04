@@ -51,7 +51,7 @@ class Math
         if ($inputUnit->weight != $outputUnit->weight) {
             // Get conversion from database with measurement unit details included.
             $conversion = Conversion::with('leftUnit', 'rightUnit')
-                ->where('master_list', '=', $master_list)
+                ->where('master_list_id', '=', $master_list)
                 ->first();
             if (count($conversion)) {
                 $conversionFactor = $conversion->right_quantity / $conversion->left_quantity;
@@ -129,7 +129,7 @@ class Math
      */
     public static function CalcRecipeCost($recipe)
     {
-        $elements = RecipeElement::where('recipe', '=', $recipe)->get();
+        $elements = RecipeElement::where('recipe_id', '=', $recipe)->get();
         $recipe = new \stdClass();
         $ingredient = new \stdClass();
         $recipe->cost = 0;
@@ -137,9 +137,9 @@ class Math
         // Cycle through each ingredient, calculate cost, and add to the total cost;
         foreach ($elements as $element) {
             $ingredient->cost = Math::CalcIngredientCost(
-                $element->master_list,
+                $element->master_list_id,
                 $element->quantity,
-                $element->unit
+                $element->unit_id
             );
             if ($ingredient->cost != -1) {
                 $recipe->cost += $ingredient->cost;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\MasterList;
 use Illuminate\Http\Request;
+use Auth;
 
 use App\Http\Requests;
 
@@ -16,7 +17,6 @@ class MasterListPriceTrackingController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('ownership');
     }
     
     /**
@@ -26,7 +26,8 @@ class MasterListPriceTrackingController extends Controller
      */
     public function index($id)
     {
-        $masterlist = MasterList::with('unit', 'priceTracking.unit')->find($id);
+        $masterlist = Auth::user()->masterlist()->with('unit', 'priceTracking.unit')->find($id)
+            ? : exit(redirect()->route('masterlist.index'));
         
         return view('masterlist.pricetracking.index')
             ->withMasterlist($masterlist);

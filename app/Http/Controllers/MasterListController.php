@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\MasterListPriceTracking;
-use App\Unit;
 use Illuminate\Http\Request;
 use App\MasterList;
 use App\Classes\Math;
@@ -11,7 +10,7 @@ use App\Classes\DesignHelper;
 use Auth;
 
 use App\Http\Requests;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class MasterListController extends Controller
 {
@@ -22,21 +21,18 @@ class MasterListController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('ownership', ['except' => ['index', 'create', 'store']]);
     }
 
     /**
-     * Display a listing of the resource.
+     * Creates a collection of all master_list records owned by the user, attached with unit information tied to ap_unit
+     * to pass to the view.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $masterlist = MasterList::select('master_list.*', 'units.name as ap_unit')
-            ->join('units', 'master_list.ap_unit', '=', 'units.id')
-            ->where('master_list.owner', '=', Auth::user()->id)
-            ->orderBy('master_list.name')
-            ->get();
+        $masterlist = Auth::user()->masterlist()->with('unit')->get();
+
         return view('masterlist.index')
             ->withMasterlist($masterlist);
     }
@@ -74,7 +70,7 @@ class MasterListController extends Controller
         $masterlist->ap_unit = $request->ap_unit;
         $masterlist->yield = $request->yield;
         $masterlist->ap_small_price = Math::CalcApUnitCost($request->price, $request->ap_quantity, $request->ap_unit);
-        $masterlist->owner = Auth::user()->id;
+        $masterlist->user_id = Auth::user()->id;
         $masterlist->vendor = $request->input('vendor');
         $masterlist->category = $request->input('category');
 
@@ -103,7 +99,9 @@ class MasterListController extends Controller
      */
     public function edit($id)
     {
-        $masterlist = MasterList::find($id);
+        $masterlist = Auth::user()->masterlist()->find($id)
+            ? : redirect()->route('masterlist.index');
+
         return view('masterlist.edit')
             ->withMasterlist($masterlist)
             ->withUnits(DesignHelper::UnitsDropDown())
@@ -122,8 +120,10 @@ class MasterListController extends Controller
     {
         //Validate
 
+        
         //Store
-        $masterlist = MasterList::find($id);
+        $masterlist = Auth::user()->masterlist()->find($id) 
+            ? : exit(redirect()->route(masterlist.index));
 
         //Send current price data to price tracking before updating new data if there are any pricing changes
         if ($masterlist->price != $request->price ||
@@ -133,7 +133,7 @@ class MasterListController extends Controller
             $pricetracking = new MasterListPriceTracking();
 
             $pricetracking->master_list = $id;
-            $pricetracking->owner = Auth::user()->id;
+            $pricetracking->user_id = Auth::user()->id;
             $pricetracking->price = $masterlist->price;
             $pricetracking->ap_quantity = $masterlist->ap_quantity;
             $pricetracking->ap_unit = $masterlist->ap_unit;
@@ -154,10 +154,7 @@ class MasterListController extends Controller
 
         $masterlist->save();
 
-
-        //Price Tracking
-
-
+        
         //Redirect
         return redirect()->route('masterlist.index');
     }
@@ -170,7 +167,8 @@ class MasterListController extends Controller
      */
     public function destroy($id)
     {
-        $masterlist = MasterList::find($id);
+        $masterlist = Auth::user()->masterlist()->find($id) 
+            ? : exit(redirect()->route('masterlist.index'));
         $masterlist->delete();
         return redirect()->route('masterlist.index');
     }

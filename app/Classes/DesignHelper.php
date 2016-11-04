@@ -52,7 +52,7 @@ class DesignHelper
     public static function IngredientsDropDown()
     {
         $ingredients = MasterList::select('id', 'name')
-            ->where('owner', '=', Auth::user()->id)
+            ->where('user_id', '=', Auth::user()->id)
             ->orderBy('name')->get();
 
         foreach ($ingredients as $ingredient) {
@@ -66,7 +66,7 @@ class DesignHelper
     {
         $ingredients = MasterList::distinct()
             ->select('vendor')
-            ->where('owner', '=', Auth::user()->id)
+            ->where('user_id', '=', Auth::user()->id)
             ->get();
 
         foreach ($ingredients as $ingredient) {
@@ -80,7 +80,7 @@ class DesignHelper
     {
         $ingredients = MasterList::distinct()
             ->select('category')
-            ->where('owner', '=', Auth::user()->id)
+            ->where('user_id', '=', Auth::user()->id)
             ->get();
 
         foreach ($ingredients as $ingredient) {

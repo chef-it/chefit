@@ -28,16 +28,16 @@
                         <tbody>
                         @foreach($elements as $element)
                             <tr>
-                                <td>{{ $element->name }}</td>
-                                <td>{{ $element->quantity }} {{ $element->unit_name }}</td>
+                                <td>{{ $element->masterlist->name }}</td>
+                                <td>{{ $element->quantity }} {{ $element->unit->name }}</td>
                                 <td>{{ $element->cost }}</td>
                                 <td>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            {{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe, $element->id], ['class' => 'btn btn-xs btn-info btn-block']) }}
+                                            {{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe_id, $element->id], ['class' => 'btn btn-xs btn-info btn-block']) }}
                                         </div>
                                         <div class="col-md-6">
-                                            {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe, $element->id], 'method' => 'DELETE']) !!}
+                                            {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe_id, $element->id], 'method' => 'DELETE']) !!}
                                             {!! Form::submit('Delete', ['class' => 'btn btn-xs btn-danger btn-block']) !!}
                                             {!! Form::close() !!}
                                         </div>

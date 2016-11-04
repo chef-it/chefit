@@ -19,7 +19,6 @@ class RecipeElementController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('ownership');
     }
 
     /**
@@ -30,23 +29,19 @@ class RecipeElementController extends Controller
     public function index($recipeId)
     {
         // Get recipe name
-        $recipe = Recipe::select('name')->where('id', '=', $recipeId)->first();
+        $recipe = Auth::user()->recipes()->find($recipeId)
+            ? : exit(redirect()->route('recipes.index'));
 
         // Get all recipe elements for a recipe.
-        $elements = RecipeElement::select('recipe_elements.*', 'master_list.name as name', 'units.name as unit_name')
-            // Join masterlist name
-            ->join('master_list', 'recipe_elements.master_list', '=', 'master_list.id')
-            // Join unit name
-            ->join('units', 'recipe_elements.unit', '=', 'units.id')
-            ->where('recipe', '=', $recipeId)
-            ->get();
+        $elements = Auth::user()->recipes()->find($recipeId)->elements()->with('masterlist', 'unit')->get();
+        $pause = true;
 
         foreach ($elements as $element) {
             $element->quantity = $element->quantity + 0;
             $element->cost = Math::CalcIngredientCost(
-                $element->master_list,
+                $element->master_list_id,
                 $element->quantity,
-                $element->unit
+                $element->unit_id
             );
 
             if ($element->cost == -1) {
@@ -85,9 +80,10 @@ class RecipeElementController extends Controller
 
         //Store
         $recipeElement = new RecipeElement();
+        
         $recipeElement->recipe = $request->recipe;
         $recipeElement->master_list = $request->master_list;
-        $recipeElement->owner = Auth::user()->id;
+        $recipeElement->user_id = Auth::user()->id;
         $recipeElement->quantity = $request->quantity;
         $recipeElement->unit = $request->unit;
 
@@ -115,7 +111,8 @@ class RecipeElementController extends Controller
      */
     public function edit($recipe, $id)
     {
-        $element = RecipeElement::find($id);
+        $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
+            ? : exit(redirect()->route('recipes.index'));
         $element->quantity = $element->quantity + 0;
         return view('recipes.elements.edit')
             ->withElement($element)
@@ -135,14 +132,16 @@ class RecipeElementController extends Controller
         //Validate
 
         //Store
-        $recipeElement = RecipeElement::find($id);
-        $recipeElement->master_list = $request->master_list;
-        $recipeElement->quantity = $request->quantity;
-        $recipeElement->unit = $request->unit;
+        $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
+            ? : exit(redirect()->route('recipes.index'));
+        
+        $element->master_list = $request->master_list;
+        $element->quantity = $request->quantity;
+        $element->unit = $request->unit;
 
-        $recipeElement->save();
+        $element->save();
 
-        return redirect()->route('recipes.elements.index', $recipeElement->recipe);
+        return redirect()->route('recipes.elements.index', $element->recipe_id);
     }
 
     /**
@@ -153,7 +152,8 @@ class RecipeElementController extends Controller
      */
     public function destroy($recipe, $id)
     {
-        $element = RecipeElement::find($id);
+        $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
+            ? : exit(redirect()->route('recipes.index'));
         $element->delete();
         return redirect()->route('recipes.elements.index', $recipe);
     }

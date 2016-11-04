@@ -33,20 +33,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($masterlist as $table)
+                            @foreach($masterlist as $ingredient)
                                 <tr>
-                                    <td>{{ $table->name }}</td>
-                                    <td>{{ $table->price }}</td>
-                                    <td>{{ $table->ap_quantity }}</td>
-                                    <td>{{ $table->ap_unit }}</td>
-                                    <td>{{ $table->yield }}</td>
-                                    <td>{{ $table->category }}</td>
-                                    <td>{{ $table->vendor }}</td>
-                                    <td>{{ link_to_route('masterlist.conversions.index', 'Conversion', [$table->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
-                                    <td>{{ link_to_route('masterlist.pricetracking.index', 'Price History', [$table->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
-                                    <td>{{ link_to_route('masterlist.edit', 'Edit', [$table->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
+                                    <td>{{ $ingredient->name }}</td>
+                                    <td>{{ $ingredient->price }}</td>
+                                    <td>{{ $ingredient->ap_quantity }}</td>
+                                    <td>{{ $ingredient->unit->name }}</td>
+                                    <td>{{ $ingredient->yield }}</td>
+                                    <td>{{ $ingredient->category }}</td>
+                                    <td>{{ $ingredient->vendor }}</td>
+                                    <td>{{ link_to_route('masterlist.conversions.index', 'Conversion', [$ingredient->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
+                                    <td>{{ link_to_route('masterlist.pricetracking.index', 'Price History', [$ingredient->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
+                                    <td>{{ link_to_route('masterlist.edit', 'Edit', [$ingredient->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
                                     <td>
-                                        {!! Form::open(['route' => ['masterlist.destroy', $table->id], 'method' => 'DELETE']) !!}
+                                        {!! Form::open(['route' => ['masterlist.destroy', $ingredient->id], 'method' => 'DELETE']) !!}
                                             {!! Form::submit('Delete', ['class' => 'btn btn-xs btn-danger btn-block']) !!}
                                         {!! Form::close() !!}
                                     </td>
