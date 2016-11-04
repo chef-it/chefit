@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+
+
 @section('title', '| Master List')
 
 @section('css')
@@ -15,7 +17,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        {!! Form::model($conversion, ['method' => 'PUT', 'route' => ['masterlist.conversions.update', $conversion->master_list, $conversion->id]]) !!}
+                        {!! Form::model($conversion, ['method' => 'PUT', 'route' => ['masterlist.conversions.update', $conversion->master_list_id, $conversion->id]]) !!}
                         {{ Form::hidden('recipe', Request::segment(2)) }}
                         <div class="form-group col-md-6">
                             {{ Form::label('left', 'Measurement One: ') }}

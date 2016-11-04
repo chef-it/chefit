@@ -14,12 +14,11 @@ use App\Http\Requests;
 class RecipeController extends Controller
 {
     /**
-     * Instantiate a new MasterListController instance.
+     * Instantiate a new RecipeController instance.
      */
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('ownership', ['except' => ['index', 'create', 'store']]);
     }
 
     /**
@@ -29,7 +28,7 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        $recipes = Recipe::where('owner', '=', Auth::user()->id)->get();
+        $recipes = Auth::user()->recipes;
 
         foreach ($recipes as $recipe) {
             $recipe->costPercent = Math::CalcRecipeCostPercent($recipe->id);
@@ -74,7 +73,7 @@ class RecipeController extends Controller
         } else {
             $recipe->component_only = $request->component_only;
         }
-        $recipe->owner = Auth::user()->id;
+        $recipe->user_id = Auth::user()->id;
 
         $recipe->save();
 
@@ -100,7 +99,8 @@ class RecipeController extends Controller
      */
     public function edit($id)
     {
-        $recipe = Recipe::find($id);
+        $recipe = $recipes = Auth::user()->recipes()->find($id)
+            ? : exit(redirect()->route('recipes.index'));
         $recipe->portions_per_batch = $recipe->portions_per_batch + 0;
         $recipe->batch_quantity = $recipe->batch_quantity + 0;
         return view('recipes.edit')
@@ -121,7 +121,8 @@ class RecipeController extends Controller
         // Validate
 
         // Store
-        $recipe = Recipe::find($id);
+        $recipe = $recipes = Auth::user()->recipes()->find($id)
+            ? : exit(redirect()->route('recipes.index'));
 
         $recipe->name = $request->name;
         $recipe->menu_price = $request->menu_price;
@@ -133,7 +134,7 @@ class RecipeController extends Controller
         } else {
             $recipe->component_only = $request->component_only;
         }
-        $recipe->owner = Auth::user()->id;
+        $recipe->user_id = Auth::user()->id;
 
         $recipe->save();
 
@@ -148,7 +149,8 @@ class RecipeController extends Controller
      */
     public function destroy($id)
     {
-        $recipe = Recipe::find($id);
+        $recipe = $recipes = Auth::user()->recipes()->find($id)
+            ? : exit(redirect()->route('recipes.index'));
         $recipe->delete();
         return redirect()->route('recipes.index');
     }

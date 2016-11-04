@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class MasterList extends Model
 {
     protected $table = 'master_list';
+    
+    public function conversion()
+    {
+        return $this->hasOne('App\Conversion');
+    }
 
     public function priceTracking()
     {
-        return $this->hasMany('App\MasterListPriceTracking', 'master_list', 'id');
+        return $this->hasMany('App\MasterListPriceTracking');
     }
     
     public function unit()
