@@ -45,7 +45,7 @@ class RecipeElementController extends Controller
             );
 
             if ($element->cost == -1) {
-                $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list], ['class' => 'btn btn-xs btn-danger btn-block']);
+                $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list_id], ['class' => 'btn btn-xs btn-danger btn-block']);
             } else {
                 $element->cost = number_format($element->cost, 2);
             }
@@ -81,15 +81,15 @@ class RecipeElementController extends Controller
         //Store
         $recipeElement = new RecipeElement();
         
-        $recipeElement->recipe = $request->recipe;
-        $recipeElement->master_list = $request->master_list;
+        $recipeElement->recipe_id = $request->recipe;
+        $recipeElement->master_list_id = $request->master_list_id;
         $recipeElement->user_id = Auth::user()->id;
         $recipeElement->quantity = $request->quantity;
-        $recipeElement->unit = $request->unit;
+        $recipeElement->unit_id = $request->unit_id;
 
         $recipeElement->save();
 
-        return redirect()->route('recipes.elements.index', $recipeElement->recipe);
+        return redirect()->route('recipes.elements.index', $recipeElement->recipe_id);
     }
 
     /**
@@ -135,9 +135,9 @@ class RecipeElementController extends Controller
         $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
             ? : exit(redirect()->route('recipes.index'));
         
-        $element->master_list = $request->master_list;
+        $element->master_list_id = $request->master_list_id;
         $element->quantity = $request->quantity;
-        $element->unit = $request->unit;
+        $element->unit_id = $request->unit_id;
 
         $element->save();
 

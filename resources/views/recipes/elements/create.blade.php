@@ -14,16 +14,16 @@
                 </div>
                 <div class="panel-body">
                     {!! Form::open(['route' => ['recipes.elements.store', Request::segment(2)]]) !!}
-                    {{ Form::hidden('recipe', Request::segment(2)) }}
+                    {{ Form::hidden('recipe_id', Request::segment(2)) }}
                     <div class="row">
                         <div class="form-group col-md-6">
-                            {{ Form::label('master_list', 'Ingredient: ') }}
-                            {{ Form::select('master_list', $ingredients, null, array('class' => 'form-control')) }}
+                            {{ Form::label('master_list_id', 'Ingredient: ') }}
+                            {{ Form::select('master_list_id', $ingredients, null, array('class' => 'form-control')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('quantity', 'Quantity: ') }}
                             {{ Form::text('quantity', null, array('class' => 'form-control')) }}
-                            {{ Form::select('unit', $units, null, array('class' => 'form-control')) }}
+                            {{ Form::select('unit_id', $units, null, array('class' => 'form-control')) }}
                         </div>
                     </div>
                     <hr style="margin-top: 6px">

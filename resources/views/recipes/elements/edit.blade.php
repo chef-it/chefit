@@ -13,17 +13,17 @@
                     <h3 class="panel-title">Edit </h3>
                 </div>
                 <div class="panel-body">
-                    {!! Form::model($element, ['method' => 'PUT', 'route' => ['recipes.elements.update', $element->recipe, $element->id]]) !!}
-                    {{ Form::hidden('recipe', $element->recipe) }}
+                    {!! Form::model($element, ['method' => 'PUT', 'route' => ['recipes.elements.update', $element->recipe_id, $element->id]]) !!}
+                    {{ Form::hidden('recipe', $element->recipe_id) }}
                     <div class="row">
                         <div class="form-group col-md-6" >
                             {{ Form::label('master_list', 'Ingredient: ') }}
-                            {{ Form::select('master_list', $ingredients, $element->master_list, array('class' => 'form-control')) }}
+                            {{ Form::select('master_list_id', $ingredients, $element->master_list_id, array('class' => 'form-control')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('quantity', 'Quantity: ') }}
                             {{ Form::text('quantity', null, array('class' => 'form-control')) }}
-                            {{ Form::select('unit', $units, $element->unit, array('class' => 'form-control')) }}
+                            {{ Form::select('unit_id', $units, $element->unit_id, array('class' => 'form-control')) }}
                         </div>
                     </div>
                     <hr style="margin-top: 6px">

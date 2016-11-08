@@ -115,7 +115,7 @@ class Math
         // return. Previous functions should have converted everything already, the if statement is a
         // double check.  TODO: change dump to error after weight <-> volume implemented.
         if ($inputUnit->system == $outputUnit->system && $inputUnit->weight == $outputUnit->weight) {
-            return $ingredient->ap_small_price * $outputUnit->factor * $quantity;
+            return $ingredient->ap_small_price * $outputUnit->factor * $ingredient->yield * $quantity;
         } else {
             die(dump('Let Dale know this shouldn\'t have happened'));
         }
