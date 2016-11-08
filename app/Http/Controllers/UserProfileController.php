@@ -28,15 +28,7 @@ class UserProfileController extends Controller
      */
     public function create()
     {
-        $profile = new UserProfile();
-
-        $profile->user_id = Auth::user()->id;
-        $profile->metric = 0;
-        $profile->currency = 'USD';
-
-        $profile->save();
-
-        return redirect('/');
+        //
     }
 
     /**

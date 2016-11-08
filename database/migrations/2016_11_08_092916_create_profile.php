@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\User;
+use App\UserProfile;
 
 class CreateProfile extends Migration
 {
@@ -24,6 +26,18 @@ class CreateProfile extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
+
+        $users = User::all();
+        foreach ($users as $user){
+            $profile = new UserProfile();
+
+            $profile->user_id = $user->id;
+            $profile->metric = 0;
+            $profile->currency = 'USD';
+
+            $profile->save();
+        }
+
     }
 
     /**
