@@ -30,7 +30,7 @@
                             <tr>
                                 <td>{{ $element->masterlist->name }}</td>
                                 <td>{{ $element->quantity }} {{ $element->unit->name }}</td>
-                                <td>{{ $element->cost }}</td>
+                                <td>{{ $currencysymbol }}{{ $element->cost }}</td>
                                 <td>
                                     <div class="row">
                                         <div class="col-md-6">

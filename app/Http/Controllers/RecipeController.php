@@ -35,7 +35,9 @@ class RecipeController extends Controller
             $recipe->menu_price = number_format($recipe->menu_price, 2);
         }
 
-        return view('recipes.index')->withRecipes($recipes);
+        return view('recipes.index')
+            ->withRecipes($recipes)
+            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
     }
 
     /**
@@ -47,7 +49,8 @@ class RecipeController extends Controller
     {
         return view('recipes.create')
             ->withUnits(DesignHelper::UnitsDropDown())
-            ->withOptions(DesignHelper::RecipeOptionsDropDown());
+            ->withOptions(DesignHelper::RecipeOptionsDropDown())
+            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
     }
 
     /**
@@ -106,7 +109,8 @@ class RecipeController extends Controller
         return view('recipes.edit')
             ->withRecipe($recipe)
             ->withUnits(DesignHelper::UnitsDropDown())
-            ->withOptions(DesignHelper::RecipeOptionsDropDown());
+            ->withOptions(DesignHelper::RecipeOptionsDropDown())
+            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
     }
 
     /**

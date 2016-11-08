@@ -35,7 +35,7 @@
                                     <td>Component</td>
                                     <td>Component</td>
                                 @else
-                                    <td>{{ $recipe->menu_price }}</td>
+                                    <td>{{ $currencysymbol }}{{ $recipe->menu_price }}</td>
                                     <td>{{ $recipe->costPercent }}</td>
                                 @endif
                                 <td>{{ link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>

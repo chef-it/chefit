@@ -44,6 +44,8 @@ class RecipeElementController extends Controller
                 $element->unit_id
             );
 
+            //If the recipe cost returns -1, it means that the weight volume conversion hasn't been inputed
+            //and creates a button to the page to create one.
             if ($element->cost == -1) {
                 $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list_id], ['class' => 'btn btn-xs btn-danger btn-block']);
             } else {
@@ -53,7 +55,8 @@ class RecipeElementController extends Controller
 
         return view('recipes.elements.index')
             ->withElements($elements)
-            ->withRecipe($recipe);
+            ->withRecipe($recipe)
+            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
     }
 
     /**

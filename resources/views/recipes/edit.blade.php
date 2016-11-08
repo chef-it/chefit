@@ -21,7 +21,10 @@
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('menu_price', 'Menu Price: ') }}
-                            {{ Form::text('menu_price', null, array('class' => 'form-control')) }}
+                            <div class="input-group">
+                                <span class="input-group-addon">{{ $currencysymbol }}</span>
+                                {{ Form::text('menu_price', null, array('class' => 'form-control')) }}
+                            </div>
                         </div>
                     </div>
                     <div class="row">

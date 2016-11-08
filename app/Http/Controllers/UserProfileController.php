@@ -3,46 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Classes\DesignHelper;
-use App\MasterList;
+use App\UserProfile;
 use Illuminate\Http\Request;
 use Auth;
 
-use App\Http\Requests;
-
-class MasterListPriceTrackingController extends Controller
+class UserProfileController extends Controller
 {
-
-    /**
-     * Instantiate a new MasterListController instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        $masterlist = Auth::user()->masterlist()->with('unit', 'priceTracking.unit')->find($id)
-            ? : exit(redirect()->route('masterlist.index'));
-        
-        return view('masterlist.pricetracking.index')
-            ->withMasterlist($masterlist)
-            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
+        return view('profile.index')
+            ->withCurrencies(DesignHelper::CurrencyDropDown())
+            ->withSystems(DesignHelper::SystemDropDown());
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create default profile.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        $profile = new UserProfile();
+
+        $profile->user_id = Auth::user()->id;
+        $profile->metric = 0;
+        $profile->currency = 'USD';
+
+        $profile->save();
+
+        return redirect('/');
     }
 
     /**
@@ -85,9 +79,16 @@ class MasterListPriceTrackingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $profile = Auth::user()->profile;
+
+        $profile->currency = $request->currency;
+        $profile->metric = $request->metric;
+
+        $profile->save();
+
+        return redirect()->route('profile.index');
     }
 
     /**
