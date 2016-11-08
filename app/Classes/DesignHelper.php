@@ -69,6 +69,10 @@ class DesignHelper
             ->where('user_id', '=', Auth::user()->id)
             ->get();
 
+        if (!$ingredients->count()) {
+            return [];
+        }
+
         foreach ($ingredients as $ingredient) {
             $select[$ingredient->vendor] = $ingredient->vendor;
         }
@@ -82,6 +86,10 @@ class DesignHelper
             ->select('category')
             ->where('user_id', '=', Auth::user()->id)
             ->get();
+        
+        if (!$ingredients->count()) {
+            return [];
+        }
 
         foreach ($ingredients as $ingredient) {
             $select[$ingredient->category] = $ingredient->category;
