@@ -34,7 +34,8 @@ class MasterListController extends Controller
         $masterlist = Auth::user()->masterlist()->with('unit')->get();
 
         return view('masterlist.index')
-            ->withMasterlist($masterlist);
+            ->withMasterlist($masterlist)
+            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
     }
 
     /**
@@ -47,7 +48,8 @@ class MasterListController extends Controller
         return view('masterlist.create')
             ->withUnits(DesignHelper::UnitsDropDown())
             ->withVendors(DesignHelper::VendorsDropDown())
-            ->withCategories(DesignHelper::MasterListCategoriesDropDown());
+            ->withCategories(DesignHelper::MasterListCategoriesDropDown())
+            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
     }
 
     /**
@@ -106,7 +108,8 @@ class MasterListController extends Controller
             ->withMasterlist($masterlist)
             ->withUnits(DesignHelper::UnitsDropDown())
             ->withVendors(DesignHelper::VendorsDropDown())
-            ->withCategories(DesignHelper::MasterListCategoriesDropDown());
+            ->withCategories(DesignHelper::MasterListCategoriesDropDown())
+            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
     }
 
     /**

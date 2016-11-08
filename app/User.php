@@ -26,6 +26,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public function Profile()
+    {
+        return $this->hasOne('App\UserProfile');
+    }
 
     public function MasterList()
     {

@@ -23,7 +23,8 @@ class DesignHelper
      */
     public static function UnitsDropDown()
     {
-        $units = Unit::orderBy('system')->orderby('order')->get();
+        $direction = (Auth::user()->profile->metric == 0) ? 'ASC' : 'DESC';
+        $units = Unit::orderBy('system', $direction)->orderby('order')->get();
         $select = array();
 
         foreach ($units as $unit) {
@@ -96,5 +97,80 @@ class DesignHelper
         }
 
         return $select;
+    }
+    
+    public static function SystemDropDown()
+    {
+        return array(
+            '0'=>'US System',
+            '1'=>'Metric System'
+        );
+    }
+    
+    public static function CurrencyDropDown()
+    {
+        return array(
+            'AUD'=>'Australian Dollar',
+            'BRL'=>'Brazilian Real',
+            'CAD'=>'Canadian Dollar',
+            'CZK'=>'Czech Koruna',
+            'DKK'=>'Danish Krone',
+            'EUR'=>'Euro',
+            'HKD'=>'Hong Kong Dollar',
+            'HUF'=>'Hungarian Forint',
+            'ILS'=>'Israeli New Sheqel',
+            'JPY'=>'Japanese Yen',
+            'MYR'=>'Malaysian Ringgit',
+            'MXN'=>'Mexican Peso',
+            'NOK'=>'Norwegian Krone',
+            'NZD'=>'New Zealand Dollar',
+            'PHP'=>'Philippine Peso',
+            'PLN'=>'Polish Zloty',
+            'GBP'=>'Pound Sterling',
+            'SGD'=>'Singapore Dollar',
+            'SEK'=>'Swedish Krona',
+            'CHF'=>'Swiss Franc',
+            'TWD'=>'Taiwan New Dollar',
+            'THB'=>'Thai Baht',
+            'TRY'=>'Turkish Lira',
+            'USD'=>'USD');
+    }
+
+    public static function CurrencySymbol()
+    {
+        switch (Auth::user()->profile->currency){
+            case 'CZK':
+                return '&#x4b;&#x10d;';
+            case 'DKK':
+                return 'kr';
+            case 'EUR':
+                return '&#8364;';
+            case 'HUF':
+                return 'Ft';
+            case 'ILS':
+                return '&#8362;';
+            case 'JPY':
+                return '&#165;';
+            case 'MYR':
+                return 'RM';
+            case 'NOK':
+                return 'kr';
+            case 'PHP':
+                return '&#8369;';
+            case 'PLN':
+                return 'zł';
+            case 'GBP':
+                return '&#163;';
+            case 'SEK':
+                return 'kr';
+            case 'CHF':
+                return 'Fr';
+            case 'THB':
+                return '&#3647;';
+            case 'TRY':
+                return 'TL';
+            default:
+                return "$";
+        }
     }
 }

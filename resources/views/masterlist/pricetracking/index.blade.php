@@ -22,14 +22,14 @@
                         <tbody>
                             @foreach($masterlist->priceTracking as $entry)
                                 <tr>
-                                    <td class="text-center">{{ $entry->price }}</td>
+                                    <td class="text-center">{{ $currencysymbol }}{{ $entry->price }}</td>
                                     <td class="text-center">{{ $entry->ap_quantity }} {{ $entry->unit->name }}</td>
                                     <td class="text-center">{{ $entry->created_at->format('m/d/Y') }}</td>
                                     <td class="text-center">{{ $entry->vendor }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td class="text-center">{{ $masterlist->price }}</td>
+                                <td class="text-center">{{ $currencysymbol }}{{ $masterlist->price }}</td>
                                 <td class="text-center">{{ $masterlist->ap_quantity }} {{ $masterlist->unit->name }}</td>
                                 <td class="text-center">{{ $masterlist->updated_at->format('m/d/Y') }}</td>
                                 <td class="text-center">{{ $masterlist->vendor }}</td>

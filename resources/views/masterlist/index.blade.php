@@ -36,7 +36,7 @@
                             @foreach($masterlist as $ingredient)
                                 <tr>
                                     <td>{{ $ingredient->name }}</td>
-                                    <td>{{ $ingredient->price }}</td>
+                                    <td>{{ $currencysymbol }}{{ $ingredient->price }}</td>
                                     <td>{{ $ingredient->ap_quantity }}</td>
                                     <td>{{ $ingredient->unit->name }}</td>
                                     <td>{{ $ingredient->yield }}</td>
