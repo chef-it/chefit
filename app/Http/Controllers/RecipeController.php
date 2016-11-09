@@ -31,7 +31,7 @@ class RecipeController extends Controller
         $recipes = Auth::user()->recipes;
 
         foreach ($recipes as $recipe) {
-            $recipe->costPercent = Math::CalcRecipeCostPercent($recipe->id);
+            $recipe->data = Math::CalcRecipeData($recipe->id);
             $recipe->menu_price = number_format($recipe->menu_price, 2);
         }
 

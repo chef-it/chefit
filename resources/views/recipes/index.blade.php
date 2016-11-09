@@ -32,11 +32,11 @@
                             <tr>
                                 <td>{{ $recipe->name }}</td>
                                 @if ($recipe->component_only == 1)
-                                    <td>Component</td>
-                                    <td>Component</td>
+                                    <td>Sub Recipe</td>
+                                    <td>Sub Recipe</td>
                                 @else
                                     <td>{{ $currencysymbol }}{{ $recipe->menu_price }}</td>
-                                    <td>{{ $recipe->costPercent }}</td>
+                                    <td>{{ $recipe->data->costPercent }}</td>
                                 @endif
                                 <td>{{ link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
                                 <td>{{ link_to_route('recipes.elements.index', 'View', [$recipe->id], ['class' => 'btn btn-xs btn-primary btn-block']) }}</td>

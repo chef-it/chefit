@@ -29,8 +29,14 @@ class RecipeElementController extends Controller
     public function index($recipeId)
     {
         // Get recipe name
-        $recipe = Auth::user()->recipes()->find($recipeId)
+        $recipe = Auth::user()->recipes()->with('batchUnit')->find($recipeId)
             ? : exit(redirect()->route('recipes.index'));
+
+        $recipe->menu_price = number_format($recipe->menu_price, 2);
+        $recipe->data = Math::CalcRecipeData($recipe->id);
+        $recipe->batch_quantity += 0;
+        $recipe->portions_per_batch += 0;
+        $recipe->data->portionPrice = $recipe->data->cost / $recipe->portions_per_batch;
 
         // Get all recipe elements for a recipe.
         $elements = Auth::user()->recipes()->find($recipeId)->elements()->with('masterlist', 'unit')->get();
