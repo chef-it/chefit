@@ -1,5 +1,6 @@
 <?php
-use App\Unit;
+use Auth;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,23 +26,16 @@ Route::resource('profile', 'UserProfileController');
 Route::resource('recipes', 'RecipeController');
 Route::resource('recipes.elements', 'RecipeElementController');
 
-Route::get('phpinfo', function(){
-    return view('phpinfo');
-});
-
 Auth::routes();
 
 Route::get('/', 'HomeController@index');
 
-Route::get('testing', function () {
-    $i=1;
-    $testing = array();
-    while ($i < 17) {
-        $test = Math::GetApSmallUnit($i);
-        $first = Unit::find($i);
-        $second = Unit::find($test);
-        $testing[$first->name] = $second->name;
-        $i++;
+Route::get('cloak/{userId}', function ($userId) {
+    if (Auth::user()->id == '1'){
+        $user = User::find($userId);
+        if ($user) {
+            Auth::login($user);
+        }
     }
-    return view('testing')->withTesting($testing);
+    return redirect('/');
 });
