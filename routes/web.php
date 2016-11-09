@@ -1,5 +1,4 @@
 <?php
-use Auth;
 use App\User;
 
 /*

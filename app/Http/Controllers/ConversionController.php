@@ -89,14 +89,14 @@ class ConversionController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Not used, redirect to index.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        return redirect()->route('masterlist.conversions.index', $id);
     }
 
     /**
@@ -147,13 +147,13 @@ class ConversionController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Not used, redirect to index.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        return redirect('/');
     }
 }

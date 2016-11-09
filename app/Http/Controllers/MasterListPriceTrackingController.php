@@ -36,50 +36,50 @@ class MasterListPriceTrackingController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Not used, redirect to index.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        return redirect()->route('masterlist.pricetracking.index', $id);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Not used, redirect to index.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        return redirect()->route('masterlist.index');
     }
 
     /**
-     * Display the specified resource.
+     * Not used, redirect to index.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        return redirect()->route('masterlist.pricetracking.index', $id);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Not used, redirect to index.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        return redirect()->route('masterlist.pricetracking.index', $id);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Not used, redirect to index.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -87,17 +87,17 @@ class MasterListPriceTrackingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return redirect()->route('masterlist.pricetracking.index', $id);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Not used, redirect to index.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        return redirect()->route('masterlist.pricetracking.index', $id);
     }
 }

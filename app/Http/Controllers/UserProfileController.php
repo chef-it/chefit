@@ -10,6 +10,14 @@ use Auth;
 class UserProfileController extends Controller
 {
     /**
+     * Instantiate a new MasterListController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -28,7 +36,7 @@ class UserProfileController extends Controller
      */
     public function create()
     {
-        //
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -39,7 +47,7 @@ class UserProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -50,7 +58,7 @@ class UserProfileController extends Controller
      */
     public function show($id)
     {
-        //
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -61,7 +69,7 @@ class UserProfileController extends Controller
      */
     public function edit($id)
     {
-        //
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -91,6 +99,6 @@ class UserProfileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return redirect()->route('profile.index');
     }
 }

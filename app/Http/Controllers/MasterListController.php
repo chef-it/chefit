@@ -83,14 +83,14 @@ class MasterListController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Not used, redirect to index.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        return redirect()->route('masterlist.index');
     }
 
     /**
