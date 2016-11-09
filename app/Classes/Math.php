@@ -154,13 +154,15 @@ class Math
      * @param $recipeID
      * @return string
      */
-    public static function CalcRecipeCostPercent($recipeID)
+    public static function CalcRecipeData($recipeID)
     {
+        $data = collect();
         $recipe = Recipe::find($recipeID);
-        $recipe->cost = Math::CalcRecipeCost($recipeID);
-
+        $data->cost = number_format(Math::CalcRecipeCost($recipeID), 2);
+        $data->costPercent = number_format(($data->cost / $recipe->menu_price * 100), 2);
+        
         // Divide total cost by menu price and return percentage.
-        return number_format(($recipe->cost / $recipe->menu_price * 100), 2);
+        return $data;
     }
 
     /**

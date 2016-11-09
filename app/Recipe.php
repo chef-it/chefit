@@ -10,4 +10,9 @@ class Recipe extends Model
     {
         return $this->hasMany('App\RecipeElement');
     }
+    
+    public function batchUnit()
+    {
+        return $this->hasOne('App\Unit', 'id', 'batch_unit');
+    }
 }
