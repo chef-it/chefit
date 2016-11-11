@@ -52,12 +52,15 @@ class DesignHelper
      */
     public static function IngredientsDropDown()
     {
-        $ingredients = MasterList::select('id', 'name')
-            ->where('user_id', '=', Auth::user()->id)
-            ->orderBy('name')->get();
+        $ingredients = Auth::user()->masterlist->sortBy('name');
 
         foreach ($ingredients as $ingredient) {
-            $select[$ingredient->id] = $ingredient->name;
+            $select['Master List']['{"type":"masterlist","id":"'.$ingredient->id.'"}'] = $ingredient->name;
+        }
+
+        $recipes = Auth::user()->recipes->sortBy('name');
+        foreach ($recipes as $recipe) {
+            $select['Recipes']['{"type":"recipe","id":"'.$recipe->id.'"}'] = $recipe->name;
         }
 
         return $select;

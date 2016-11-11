@@ -17,8 +17,8 @@
                     {{ Form::hidden('recipe_id', Request::segment(2)) }}
                     <div class="row">
                         <div class="form-group col-md-6">
-                            {{ Form::label('master_list_id', 'Ingredient: ') }}
-                            {{ Form::select('master_list_id', $ingredients, null, array('class' => 'form-control')) }}
+                            {{ Form::label('ingredient', 'Ingredient: ') }}
+                            {{ Form::select('ingredient', $ingredients, null, array('class' => 'form-control')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('quantity', 'Quantity: ') }}

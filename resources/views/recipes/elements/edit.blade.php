@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="form-group col-md-6" >
                             {{ Form::label('master_list', 'Ingredient: ') }}
-                            {{ Form::select('master_list_id', $ingredients, $element->master_list_id, array('class' => 'form-control')) }}
+                            {{ Form::select('master_list_id', $ingredients, $element->ingredientId, array('class' => 'form-control')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('quantity', 'Quantity: ') }}

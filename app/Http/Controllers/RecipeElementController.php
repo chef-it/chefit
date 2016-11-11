@@ -40,15 +40,20 @@ class RecipeElementController extends Controller
 
         // Get all recipe elements for a recipe.
         $elements = Auth::user()->recipes()->find($recipeId)->elements()->with('masterlist', 'unit')->get();
-        $pause = true;
 
+        // TODO: This needs to be made DRY
         foreach ($elements as $element) {
             $element->quantity = $element->quantity + 0;
-            $element->cost = Math::CalcIngredientCost(
-                $element->master_list_id,
-                $element->quantity,
-                $element->unit_id
-            );
+            if ($element->type == 'masterlist') {
+                $element->cost = Math::CalcIngredientCost(
+                    $element->master_list_id,
+                    $element->quantity,
+                    $element->unit_id
+                );
+            } else if ($element->type == 'recipe') {
+                $element->cost = 0;
+            }
+
 
             //If the recipe cost returns -1, it means that the weight volume conversion hasn't been inputed
             //and creates a button to the page to create one.
@@ -88,10 +93,20 @@ class RecipeElementController extends Controller
         //Validate
 
         //Store
+        $ingredientData = json_decode($request->ingredient);
+
+
         $recipeElement = new RecipeElement();
         
         $recipeElement->recipe_id = $request->recipe;
-        $recipeElement->master_list_id = $request->master_list_id;
+        $recipeElement->type = $ingredientData->type;
+        if ($ingredientData->type == 'masterlist') {
+            $recipeElement->master_list_id = $ingredientData->id;
+            $recipeElement->sub_recipe_id = null;
+        } else {
+            $recipeElement->master_list_id = null;
+            $recipeElement->sub_recipe_id = $ingredientData->id;
+        }
         $recipeElement->user_id = Auth::user()->id;
         $recipeElement->quantity = $request->quantity;
         $recipeElement->unit_id = $request->unit_id;
@@ -123,6 +138,14 @@ class RecipeElementController extends Controller
         $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
             ? : exit(redirect()->route('recipes.index'));
         $element->quantity = $element->quantity + 0;
+
+        if ($element->type == 'masterlist') {
+            $element->ingredientId = '{"type":"masterlist","id":"'.$element->master_list_id.'"}';
+        } else if ($element->type == 'recipe') {
+            $element->ingredientId = '{"type":"recipe","id":"'.$element->sub_recipe_id.'"}';
+        }
+        $pause = true;
+
         return view('recipes.elements.edit')
             ->withElement($element)
             ->withIngredients(DesignHelper::IngredientsDropDown())

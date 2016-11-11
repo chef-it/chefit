@@ -10,6 +10,11 @@ class RecipeElement extends Model
     {
         return $this->hasOne('App\MasterList', 'id', 'master_list_id');
     }
+    
+    public function subrecipe()
+    {
+        return $this->hasOne('App\Recipe', 'id', 'sub_recipe_id');
+    }
 
     public function unit()
     {

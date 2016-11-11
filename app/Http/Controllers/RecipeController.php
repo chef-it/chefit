@@ -67,7 +67,13 @@ class RecipeController extends Controller
         $recipe = new Recipe();
 
         $recipe->name = $request->name;
-        $recipe->menu_price = $request->menu_price;
+
+        if ($request->menu_price == '') {
+            $recipe->menu_price = null;
+        } else {
+            $recipe->menu_price = $request->menu_price;
+        }
+
         $recipe->portions_per_batch = $request->portions_per_batch;
         $recipe->batch_quantity = $request->batch_quantity;
         $recipe->batch_unit = $request->batch_unit;

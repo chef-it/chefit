@@ -136,14 +136,19 @@ class Math
 
         // Cycle through each ingredient, calculate cost, and add to the total cost;
         foreach ($elements as $element) {
-            $ingredient->cost = Math::CalcIngredientCost(
-                $element->master_list_id,
-                $element->quantity,
-                $element->unit_id
-            );
-            if ($ingredient->cost != -1) {
-                $recipe->cost += $ingredient->cost;
+            if ($element->type == 'masterlist') {
+                $ingredient->cost = Math::CalcIngredientCost(
+                    $element->master_list_id,
+                    $element->quantity,
+                    $element->unit_id
+                );
+                if ($ingredient->cost != -1) {
+                    $recipe->cost += $ingredient->cost;
+                }
+            } else if ($element->type == 'recipe') {
+                $ingredient->cost = 0;
             }
+
         }
         return $recipe->cost;
     }
@@ -159,8 +164,13 @@ class Math
         $data = collect();
         $recipe = Recipe::find($recipeID);
         $data->cost = number_format(Math::CalcRecipeCost($recipeID), 2);
-        $data->costPercent = number_format(($data->cost / $recipe->menu_price * 100), 2);
-        
+
+        if ($recipe->menu_price == 0) {
+            $data->costPercent = 0;
+        } else {
+            $data->costPercent = number_format(($data->cost / $recipe->menu_price * 100), 2);
+        }
+
         // Divide total cost by menu price and return percentage.
         return $data;
     }
