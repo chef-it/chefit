@@ -17,24 +17,24 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             {{ Form::label('name', 'Name: ') }}
-                            {{ Form::text('name', null, array('class' => 'form-control', 'required' => 'required')) }}
+                            {{ Form::text('name', null, array('class' => 'form-control', 'required' => 'required', 'autocomplete' => 'off')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('price', 'Price: ') }}
                             <div class="input-group">
                                 <span class="input-group-addon">{{ $currencysymbol }}</span>
-                                {{ Form::text('price', null, array('class' => 'form-control', 'required' => 'required')) }}
+                                {{ Form::text('price', null, array('class' => 'form-control', 'required' => 'required', 'autocomplete' => 'off')) }}
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
                             {{ Form::label('yield', 'Yield: ') }}
-                            {{ Form::text('yield', null, array('class' => 'form-control', 'required' => 'required')) }}
+                            {{ Form::text('yield', null, array('class' => 'form-control', 'required' => 'required', 'autocomplete' => 'off')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('ap_quantity', 'AP Value: ') }}
-                            {{ Form::text('ap_quantity', null, array('class' => 'form-control', 'required' => 'required')) }}
+                            {{ Form::text('ap_quantity', null, array('class' => 'form-control', 'required' => 'required', 'autocomplete' => 'off')) }}
                             {{ Form::select('ap_unit', $units, $masterlist->ap_unit, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                     </div>

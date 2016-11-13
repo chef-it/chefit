@@ -94,13 +94,9 @@ class RecipeElementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\StoreRecipeComponent $request)
     {
-        //Validate
-
-        //Store
         $ingredientData = json_decode($request->ingredient);
-
 
         $recipeElement = new RecipeElement();
         
@@ -164,11 +160,8 @@ class RecipeElementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $recipe, $id)
+    public function update(Requests\StoreRecipeComponent $request, $recipe, $id)
     {
-        //Validate
-
-        //Store
         $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
             ? : exit(redirect()->route('recipes.index'));
 
