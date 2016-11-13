@@ -152,6 +152,15 @@ class RecipeController extends Controller
 
         return redirect()->route('recipes.index');
     }
+    
+    public function instructions(Request $request, $id){
+        $recipe = Auth::user()->recipes()->find($id)
+            ? : exit(redirect()->route('recipes.index'));
+        $recipe->instructions = $request->instructions;
+        $recipe->save();
+
+        return redirect()->route('recipes.elements.index', $id);
+    }
 
     /**
      * Remove the specified resource from storage.

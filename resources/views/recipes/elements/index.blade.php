@@ -5,6 +5,7 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.0/css/responsive.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css">
 @endsection
 
 @section('content')
@@ -89,7 +90,10 @@
                         <h3 class="panel-title">Recipe Instructions</h3>
                     </div>
                     <div class="panel-body">
-                        Work in progress
+                        {{ Form::open(['route' => ['recipes.instructions', $recipe->id], 'method' => 'PUT']) }}
+                        {{ Form::textarea('instructions', $recipe->instructions, array('class' => 'form-control', 'id' => 'instructions')) }}
+                        {{ Form::submit('Save', array('class' => 'btn btn-success btn-block')) }}
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>
@@ -102,6 +106,7 @@
     <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.1.0/js/responsive.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function(){
@@ -114,6 +119,10 @@
             //Search input style
             $('.dataTables_filter input').addClass('form-control').attr('placeholder','Search');
             $('.dataTables_length select').addClass('form-control');
+
+            $('#instructions').summernote({
+                height:300,
+            });
         });
     </script>
 @endsection

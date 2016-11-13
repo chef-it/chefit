@@ -37,6 +37,7 @@ class RecipeElementController extends Controller
         $recipe->batch_quantity += 0;
         $recipe->portions_per_batch += 0;
         $recipe->data->portionPrice = $recipe->data->cost / $recipe->portions_per_batch;
+        $recipe->instructions = htmlspecialchars($recipe->instructions);
 
         // Get all recipe elements for a recipe.
         $elements = Auth::user()->recipes()->find($recipeId)->elements()->with('masterlist', 'unit')->get();

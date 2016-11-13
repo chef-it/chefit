@@ -22,6 +22,8 @@ Route::resource('masterlist.pricetracking', 'MasterListPriceTrackingController')
 
 Route::resource('profile', 'UserProfileController');
 
+Route::put('recipes/{recipeId}/instructions', 'RecipeController@instructions')
+    ->name('recipes.instructions');
 Route::resource('recipes', 'RecipeController');
 Route::resource('recipes.elements', 'RecipeElementController');
 
