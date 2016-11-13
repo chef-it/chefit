@@ -39,7 +39,7 @@
                                     <td>{{ $currencysymbol }}{{ $ingredient->price }}</td>
                                     <td>{{ $ingredient->ap_quantity }}</td>
                                     <td>{{ $ingredient->unit->name }}</td>
-                                    <td>{{ $ingredient->yield }}</td>
+                                    <td>{{ $ingredient->yield }}%</td>
                                     <td>{{ $ingredient->category }}</td>
                                     <td>{{ $ingredient->vendor }}</td>
                                     <td>{{ link_to_route('masterlist.conversions.index', 'Conversion', [$ingredient->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>

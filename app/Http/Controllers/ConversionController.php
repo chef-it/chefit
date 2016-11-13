@@ -64,12 +64,10 @@ class ConversionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $masterlistid)
+    public function store(Requests\StoreMasterListConversion $request, $masterlistid)
     {
         $masterlist = Auth::user()->masterlist()->find($masterlistid)
             ? : exit(redirect()->route('masterlist.index'));
-        
-        // Validate
 
         $conversion = new Conversion();
 
@@ -112,7 +110,8 @@ class ConversionController extends Controller
             ? : exit(redirect()->route('masterlist.index'));
         $conversion = Auth::user()->masterlist()->find($id)->conversion()->first()
             ? : exit(redirect()->route('masterlist.index'));
-
+        $conversion->left_quantity += 0;
+        $conversion->right_quantity += 0;
 
         return view('masterlist.conversions.edit')
             ->withUnits(DesignHelper::UnitsDropDown())
@@ -127,10 +126,9 @@ class ConversionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $masterlist, $id)
+    public function update(Requests\StoreMasterListConversion $request, $masterlist, $id)
     {
-
-        $conversion = Auth::user()->masterlist()->find($id)->conversion()->first()
+        $conversion = Auth::user()->masterlist()->find($masterlist)->conversion()->first()
             ? : exit(redirect()->route('masterlist.index'));
 
         $conversion->left_quantity = $request->left_quantity;

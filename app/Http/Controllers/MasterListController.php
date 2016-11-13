@@ -10,7 +10,6 @@ use App\Classes\DesignHelper;
 use Auth;
 
 use App\Http\Requests;
-use Illuminate\Support\Facades\Gate;
 
 class MasterListController extends Controller
 {
@@ -32,6 +31,9 @@ class MasterListController extends Controller
     public function index()
     {
         $masterlist = Auth::user()->masterlist()->with('unit')->get();
+        foreach ($masterlist as $ingredient) {
+            $ingredient->yield *= 100;
+        }
 
         return view('masterlist.index')
             ->withMasterlist($masterlist)
@@ -58,19 +60,19 @@ class MasterListController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\StoreMasterList $request)
     {
-        //Validate
-
-
-        //Store
         $masterlist = new MasterList();
 
         $masterlist->name = $request->name;
         $masterlist->price = $request->price;
         $masterlist->ap_quantity = $request->ap_quantity;
         $masterlist->ap_unit = $request->ap_unit;
-        $masterlist->yield = $request->yield;
+        if ($request->yield > 1) {
+            $masterlist->yield = $request->yield / 100;
+        } else {
+            $masterlist->yield = $request->yield;
+        }
         $masterlist->ap_small_price = Math::CalcApUnitCost($request->price, $request->ap_quantity, $request->ap_unit);
         $masterlist->user_id = Auth::user()->id;
         $masterlist->vendor = $request->input('vendor');
@@ -119,19 +121,16 @@ class MasterListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\StoreMasterList $request, $id)
     {
-        //Validate
-
-        
-        //Store
         $masterlist = Auth::user()->masterlist()->find($id) 
             ? : exit(redirect()->route(masterlist.index));
 
         //Send current price data to price tracking before updating new data if there are any pricing changes
         if ($masterlist->price != $request->price ||
             $masterlist->ap_quantity != $request->ap_quantity ||
-            $masterlist->ap_unit != $request->ap_unit
+            $masterlist->ap_unit != $request->ap_unit ||
+            $masterlist->vendor != $request->vendor
         ) {
             $pricetracking = new MasterListPriceTracking();
 
@@ -150,15 +149,17 @@ class MasterListController extends Controller
         $masterlist->price = $request->input('price');
         $masterlist->ap_quantity = $request->input('ap_quantity');
         $masterlist->ap_unit = $request->input('ap_unit');
-        $masterlist->yield = $request->input('yield');
+        if ($request->yield > 1) {
+            $masterlist->yield = $request->yield / 100;
+        } else {
+            $masterlist->yield = $request->yield;
+        }
         $masterlist->ap_small_price = Math::CalcApUnitCost($request->price, $request->ap_quantity, $request->ap_unit);
         $masterlist->vendor = $request->input('vendor');
         $masterlist->category = $request->input('category');
 
         $masterlist->save();
-
         
-        //Redirect
         return redirect()->route('masterlist.index');
     }
 

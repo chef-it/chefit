@@ -59,11 +59,8 @@ class RecipeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\StoreRecipe $request)
     {
-        // Validate
-
-        // Store
         $recipe = new Recipe();
 
         $recipe->name = $request->name;
@@ -126,11 +123,8 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\StoreRecipe $request, $id)
     {
-        // Validate
-
-        // Store
         $recipe = $recipes = Auth::user()->recipes()->find($id)
             ? : exit(redirect()->route('recipes.index'));
 

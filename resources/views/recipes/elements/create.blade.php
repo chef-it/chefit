@@ -22,7 +22,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('quantity', 'Quantity: ') }}
-                            {{ Form::text('quantity', null, array('class' => 'form-control', 'required' => 'required')) }}
+                            {{ Form::text('quantity', null, array('class' => 'form-control', 'required' => 'required', 'autocomplete' => 'off')) }}
                             {{ Form::select('unit_id', $units, null, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                     </div>
