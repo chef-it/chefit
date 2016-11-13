@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             {{ Form::label('name', 'Name: ') }}
-                            {{ Form::text('name', null, array('class' => 'form-control')) }}
+                            {{ Form::text('name', null, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('batch_quantity', 'Batch Quantity: ') }}
@@ -35,11 +35,11 @@
                         </div>
                         <div class="form-group col-md-3">
                             {{ Form::label('portions_per_batch', 'Portions per Batch: ') }}
-                            {{ Form::text('portions_per_batch', null, array('class' => 'form-control')) }}
+                            {{ Form::text('portions_per_batch', null, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                         <div class="form-group col-md-3">
                             {{ Form::label('component_only', 'Sub Recipe Only: ') }}
-                            {{ Form::select('component_only', $options, null, array('class' => 'form-control')) }}
+                            {{ Form::select('component_only', $options, null, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                     </div>
                     <hr style="margin-top: 6px">

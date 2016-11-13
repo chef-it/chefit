@@ -21,13 +21,13 @@
                         {{ Form::hidden('recipe', Request::segment(2)) }}
                         <div class="form-group col-md-6">
                             {{ Form::label('left', 'Measurement One: ') }}
-                            {{ Form::text('left_quantity', null, array('class' => 'form-control', 'autocomplete' => 'off')) }}
-                            {{ Form::select('left_unit', $units, null, array('class' => 'form-control')) }}
+                            {{ Form::text('left_quantity', null, array('class' => 'form-control', 'autocomplete' => 'off', 'required' => 'required')) }}
+                            {{ Form::select('left_unit', $units, null, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('right', 'Measurement Two: ') }}
-                            {{ Form::text('right_quantity', null, array('class' => 'form-control', 'autocomplete' => 'off')) }}
-                            {{ Form::select('right_unit', $units, null, array('class' => 'form-control')) }}
+                            {{ Form::text('right_quantity', null, array('class' => 'form-control', 'autocomplete' => 'off', 'required' => 'required')) }}
+                            {{ Form::select('right_unit', $units, null, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                     </div>
                     <hr style="margin-top: 6px">

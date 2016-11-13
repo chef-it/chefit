@@ -18,12 +18,12 @@
                     <div class="row">
                         <div class="form-group col-md-6" >
                             {{ Form::label('ingredient', 'Ingredient: ') }}
-                            {{ Form::select('ingredient', $ingredients, $element->ingredientId, array('class' => 'form-control')) }}
+                            {{ Form::select('ingredient', $ingredients, $element->ingredientId, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('quantity', 'Quantity: ') }}
-                            {{ Form::text('quantity', null, array('class' => 'form-control')) }}
-                            {{ Form::select('unit_id', $units, $element->unit_id, array('class' => 'form-control')) }}
+                            {{ Form::text('quantity', null, array('class' => 'form-control', 'required' => 'required')) }}
+                            {{ Form::select('unit_id', $units, $element->unit_id, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                     </div>
                     <hr style="margin-top: 6px">

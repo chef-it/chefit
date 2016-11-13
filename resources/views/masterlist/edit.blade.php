@@ -17,25 +17,25 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             {{ Form::label('name', 'Name: ') }}
-                            {{ Form::text('name', null, array('class' => 'form-control')) }}
+                            {{ Form::text('name', null, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('price', 'Price: ') }}
                             <div class="input-group">
                                 <span class="input-group-addon">{{ $currencysymbol }}</span>
-                                {{ Form::text('price', null, array('class' => 'form-control')) }}
+                                {{ Form::text('price', null, array('class' => 'form-control', 'required' => 'required')) }}
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
                             {{ Form::label('yield', 'Yield: ') }}
-                            {{ Form::text('yield', null, array('class' => 'form-control')) }}
+                            {{ Form::text('yield', null, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('ap_quantity', 'AP Value: ') }}
-                            {{ Form::text('ap_quantity', null, array('class' => 'form-control')) }}
-                            {{ Form::select('ap_unit', $units, $masterlist->ap_unit, array('class' => 'form-control')) }}
+                            {{ Form::text('ap_quantity', null, array('class' => 'form-control', 'required' => 'required')) }}
+                            {{ Form::select('ap_unit', $units, $masterlist->ap_unit, array('class' => 'form-control', 'required' => 'required')) }}
                         </div>
                     </div>
                     <div class="row">
