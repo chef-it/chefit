@@ -51,14 +51,20 @@ class RecipeElementController extends Controller
                     $element->unit_id
                 );
             } else if ($element->type == 'recipe') {
-                $element->cost = 0;
+                $element->cost = Math::CalcSubRecipeCost(
+                    $element->sub_recipe_id,
+                    $element->quantity,
+                    $element->unit_id
+                );
             }
 
 
             //If the recipe cost returns -1, it means that the weight volume conversion hasn't been inputed
             //and creates a button to the page to create one.
-            if ($element->cost == -1) {
+            if ($element->type == 'masterlist' && $element->cost == -1) {
                 $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list_id], ['class' => 'btn btn-xs btn-danger btn-block']);
+            } else if ($element->type == 'recipe' && $element->cost == -1) {
+                $element->cost = 'I didn\'t account for this calculation. Please let me know I need to add it';
             } else {
                 $element->cost = number_format($element->cost, 2);
             }
@@ -103,7 +109,7 @@ class RecipeElementController extends Controller
         if ($ingredientData->type == 'masterlist') {
             $recipeElement->master_list_id = $ingredientData->id;
             $recipeElement->sub_recipe_id = null;
-        } else {
+        } else if ($ingredientData->type == 'recipe') {
             $recipeElement->master_list_id = null;
             $recipeElement->sub_recipe_id = $ingredientData->id;
         }
@@ -144,7 +150,6 @@ class RecipeElementController extends Controller
         } else if ($element->type == 'recipe') {
             $element->ingredientId = '{"type":"recipe","id":"'.$element->sub_recipe_id.'"}';
         }
-        $pause = true;
 
         return view('recipes.elements.edit')
             ->withElement($element)
@@ -166,8 +171,16 @@ class RecipeElementController extends Controller
         //Store
         $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
             ? : exit(redirect()->route('recipes.index'));
-        
-        $element->master_list_id = $request->master_list_id;
+
+        $ingredientData = json_decode($request->ingredient);
+        if ($ingredientData->type == 'masterlist') {
+            $element->master_list_id = $ingredientData->id;
+            $element->sub_recipe_id = null;
+        } else {
+            $element->master_list_id = null;
+            $element->sub_recipe_id = $ingredientData->id;
+        }
+
         $element->quantity = $request->quantity;
         $element->unit_id = $request->unit_id;
 

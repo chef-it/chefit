@@ -130,8 +130,8 @@ class Math
     public static function CalcRecipeCost($recipe)
     {
         $elements = RecipeElement::where('recipe_id', '=', $recipe)->get();
-        $recipe = new \stdClass();
-        $ingredient = new \stdClass();
+        $recipe = collect();
+        $ingredient = collect();
         $recipe->cost = 0;
 
         // Cycle through each ingredient, calculate cost, and add to the total cost;
@@ -146,7 +146,11 @@ class Math
                     $recipe->cost += $ingredient->cost;
                 }
             } else if ($element->type == 'recipe') {
-                $ingredient->cost = 0;
+                $ingredient->cost = Math::CalcSubRecipeCost(
+                    $element->sub_recipe_id,
+                    $element->quantity,
+                    $element->unit_id
+                );
             }
 
         }
@@ -173,6 +177,38 @@ class Math
 
         // Divide total cost by menu price and return percentage.
         return $data;
+    }
+    
+    public static function CalcSubRecipeCost($recipeID, $quantity, $unit)
+    {
+        //Get recipe data
+        $recipe = Auth::user()->recipes()->find($recipeID);
+        //Get the total cost of the recipe
+        $recipe->cost = Math::CalcRecipeCost($recipeID);
+        // Get units record for master_list small unit
+        $inputUnit = Unit::find(Math::GetApSmallUnit($recipe->batch_unit));
+        // Get units record for $unit
+        $outputUnit = Unit::find($unit);
+
+        //If recipe calls for portion, return cost divided by portions per recipe.
+        if ($unit == 16) {
+            return $recipe->cost / $recipe->portions_per_batch * $quantity;
+        }
+
+        //If recipe calls for each, and sub recipe is set to each, return cost divided by each.
+        if ($unit == 15 && $recipe->batch_unit = 15) {
+            return $recipe->cost / $recipe->batch_quantity * $quantity;
+        } else if ($unit == 15) {
+            //Recipe calls for each, sub recipe isn't set to each, so just return sub recipe cost.
+            return $recipe->cost;
+        }
+
+        if ($inputUnit->system == $outputUnit->system && $inputUnit->weight == $outputUnit->weight) {
+            $recipe->smallCost = $recipe->cost / $inputUnit->factor / $recipe->batch_quantity;
+            return $recipe->smallCost * $outputUnit->factor * $quantity;
+        } else {
+            return -1;
+        }
     }
 
     /**

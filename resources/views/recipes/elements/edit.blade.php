@@ -17,8 +17,8 @@
                     {{ Form::hidden('recipe', $element->recipe_id) }}
                     <div class="row">
                         <div class="form-group col-md-6" >
-                            {{ Form::label('master_list', 'Ingredient: ') }}
-                            {{ Form::select('master_list_id', $ingredients, $element->ingredientId, array('class' => 'form-control')) }}
+                            {{ Form::label('ingredient', 'Ingredient: ') }}
+                            {{ Form::select('ingredient', $ingredients, $element->ingredientId, array('class' => 'form-control')) }}
                         </div>
                         <div class="form-group col-md-6">
                             {{ Form::label('quantity', 'Quantity: ') }}
