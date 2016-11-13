@@ -28,7 +28,11 @@
                         <tbody>
                         @foreach($elements as $element)
                             <tr>
-                                <td>{{ $element->masterlist->name }}</td>
+                                @if ($element->type == 'masterlist')
+                                    <td>{{ $element->masterlist->name }}</td>
+                                @elseif($element->type == 'recipe')
+                                    <td>{{ $element->subrecipe->name }}</td>
+                                @endif
                                 <td>{{ $element->quantity }} {{ $element->unit->name }}</td>
                                 <td>{{ $currencysymbol }}{{ $element->cost }}</td>
                                 <td>

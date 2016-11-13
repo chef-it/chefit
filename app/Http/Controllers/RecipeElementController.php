@@ -40,20 +40,31 @@ class RecipeElementController extends Controller
 
         // Get all recipe elements for a recipe.
         $elements = Auth::user()->recipes()->find($recipeId)->elements()->with('masterlist', 'unit')->get();
-        $pause = true;
 
+        // TODO: This needs to be made DRY
         foreach ($elements as $element) {
             $element->quantity = $element->quantity + 0;
-            $element->cost = Math::CalcIngredientCost(
-                $element->master_list_id,
-                $element->quantity,
-                $element->unit_id
-            );
+            if ($element->type == 'masterlist') {
+                $element->cost = Math::CalcIngredientCost(
+                    $element->master_list_id,
+                    $element->quantity,
+                    $element->unit_id
+                );
+            } else if ($element->type == 'recipe') {
+                $element->cost = Math::CalcSubRecipeCost(
+                    $element->sub_recipe_id,
+                    $element->quantity,
+                    $element->unit_id
+                );
+            }
+
 
             //If the recipe cost returns -1, it means that the weight volume conversion hasn't been inputed
             //and creates a button to the page to create one.
-            if ($element->cost == -1) {
+            if ($element->type == 'masterlist' && $element->cost == -1) {
                 $element->cost = link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list_id], ['class' => 'btn btn-xs btn-danger btn-block']);
+            } else if ($element->type == 'recipe' && $element->cost == -1) {
+                $element->cost = 'I didn\'t account for this calculation. Please let me know I need to add it';
             } else {
                 $element->cost = number_format($element->cost, 2);
             }
@@ -70,11 +81,11 @@ class RecipeElementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($recipeID)
     {
         return view('recipes.elements.create')
             ->withUnits(DesignHelper::UnitsDropDown())
-            ->withIngredients(DesignHelper::IngredientsDropDown());
+            ->withIngredients(DesignHelper::IngredientsDropDown($recipeID));
     }
 
     /**
@@ -88,10 +99,20 @@ class RecipeElementController extends Controller
         //Validate
 
         //Store
+        $ingredientData = json_decode($request->ingredient);
+
+
         $recipeElement = new RecipeElement();
         
         $recipeElement->recipe_id = $request->recipe;
-        $recipeElement->master_list_id = $request->master_list_id;
+        $recipeElement->type = $ingredientData->type;
+        if ($ingredientData->type == 'masterlist') {
+            $recipeElement->master_list_id = $ingredientData->id;
+            $recipeElement->sub_recipe_id = null;
+        } else if ($ingredientData->type == 'recipe') {
+            $recipeElement->master_list_id = null;
+            $recipeElement->sub_recipe_id = $ingredientData->id;
+        }
         $recipeElement->user_id = Auth::user()->id;
         $recipeElement->quantity = $request->quantity;
         $recipeElement->unit_id = $request->unit_id;
@@ -118,14 +139,21 @@ class RecipeElementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($recipe, $id)
+    public function edit($recipeID, $id)
     {
-        $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
+        $element = Auth::user()->recipes()->find($recipeID)->elements()->find($id)
             ? : exit(redirect()->route('recipes.index'));
         $element->quantity = $element->quantity + 0;
+
+        if ($element->type == 'masterlist') {
+            $element->ingredientId = '{"type":"masterlist","id":"'.$element->master_list_id.'"}';
+        } else if ($element->type == 'recipe') {
+            $element->ingredientId = '{"type":"recipe","id":"'.$element->sub_recipe_id.'"}';
+        }
+
         return view('recipes.elements.edit')
             ->withElement($element)
-            ->withIngredients(DesignHelper::IngredientsDropDown())
+            ->withIngredients(DesignHelper::IngredientsDropDown($recipeID))
             ->withUnits(DesignHelper::UnitsDropDown());
     }
 
@@ -143,8 +171,16 @@ class RecipeElementController extends Controller
         //Store
         $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
             ? : exit(redirect()->route('recipes.index'));
-        
-        $element->master_list_id = $request->master_list_id;
+
+        $ingredientData = json_decode($request->ingredient);
+        if ($ingredientData->type == 'masterlist') {
+            $element->master_list_id = $ingredientData->id;
+            $element->sub_recipe_id = null;
+        } else {
+            $element->master_list_id = null;
+            $element->sub_recipe_id = $ingredientData->id;
+        }
+
         $element->quantity = $request->quantity;
         $element->unit_id = $request->unit_id;
 
