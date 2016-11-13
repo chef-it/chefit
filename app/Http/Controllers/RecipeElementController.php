@@ -81,11 +81,11 @@ class RecipeElementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($recipeID)
     {
         return view('recipes.elements.create')
             ->withUnits(DesignHelper::UnitsDropDown())
-            ->withIngredients(DesignHelper::IngredientsDropDown());
+            ->withIngredients(DesignHelper::IngredientsDropDown($recipeID));
     }
 
     /**
@@ -139,9 +139,9 @@ class RecipeElementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($recipe, $id)
+    public function edit($recipeID, $id)
     {
-        $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
+        $element = Auth::user()->recipes()->find($recipeID)->elements()->find($id)
             ? : exit(redirect()->route('recipes.index'));
         $element->quantity = $element->quantity + 0;
 
@@ -153,7 +153,7 @@ class RecipeElementController extends Controller
 
         return view('recipes.elements.edit')
             ->withElement($element)
-            ->withIngredients(DesignHelper::IngredientsDropDown())
+            ->withIngredients(DesignHelper::IngredientsDropDown($recipeID))
             ->withUnits(DesignHelper::UnitsDropDown());
     }
 

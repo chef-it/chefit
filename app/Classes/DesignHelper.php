@@ -50,7 +50,7 @@ class DesignHelper
      *
      * @return array
      */
-    public static function IngredientsDropDown()
+    public static function IngredientsDropDown($recipeID)
     {
         $ingredients = Auth::user()->masterlist->sortBy('name');
 
@@ -60,7 +60,10 @@ class DesignHelper
 
         $recipes = Auth::user()->recipes->sortBy('name');
         foreach ($recipes as $recipe) {
-            $select['Recipes']['{"type":"recipe","id":"'.$recipe->id.'"}'] = $recipe->name;
+            //Exclude current recipe from list of sub-recipes
+            if ($recipe->id != $recipeID){
+                $select['Recipes']['{"type":"recipe","id":"'.$recipe->id.'"}'] = $recipe->name;
+            }
         }
 
         return $select;
