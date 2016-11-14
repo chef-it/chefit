@@ -20,4 +20,9 @@ class RecipeElement extends Model
     {
         return $this->hasOne('App\Unit', 'id', 'unit_id');
     }
+    
+    public function recipe()
+    {
+        return $this->hasOne('App\Recipe', 'id', 'recipe_id');
+    }
 }

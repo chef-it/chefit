@@ -43,7 +43,7 @@
                                     <td>{{ $ingredient->category }}</td>
                                     <td>{{ $ingredient->vendor }}</td>
                                     <td>{{ link_to_route('masterlist.conversions.index', 'Conversion', [$ingredient->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
-                                    <td>{{ link_to_route('masterlist.pricetracking.index', 'Price History', [$ingredient->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
+                                    <td>{{ link_to_route('masterlist.statistics.index', 'Statistics', [$ingredient->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
                                     <td>{{ link_to_route('masterlist.edit', 'Edit', [$ingredient->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
                                     <td>
                                         {!! Form::open(['route' => ['masterlist.destroy', $ingredient->id], 'method' => 'DELETE']) !!}

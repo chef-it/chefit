@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', '| Price Tracking')
+@section('title', '| Statistics')
 
 @section('content')
     <div class="container">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-6 col-md-offset-1">
             <div class="panel panel-grey">
                 <div class="panel-heading">
                     <h3 class="panel-title">{{ $masterlist->name }}</h3>
@@ -36,6 +36,30 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-grey">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        @if ($masterlist->elements->count() != 1)
+                        Used in {{ $masterlist->elements->count() }} Recipes
+                        @else
+                        Used in 1 Recipe
+                        @endif
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    @if ($masterlist->elements->count())
+                        <ul style="margin-bottom: 0px">
+                        @foreach($masterlist->elements as $element)
+                            <li>{{ $element->recipe->name }}</li>
+                        @endforeach
+                        </ul>
+                    @else
+                        {{ $masterlist->name }} currently is not used in any recipes.
+                    @endif
                 </div>
             </div>
         </div>

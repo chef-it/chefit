@@ -22,4 +22,9 @@ class MasterList extends Model
     {
         return $this->hasOne('App\Unit', 'id', 'ap_unit');
     }
+
+    public function elements()
+    {
+        return $this->hasMany('App\RecipeElement');
+    }
 }

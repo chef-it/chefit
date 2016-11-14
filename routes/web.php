@@ -18,7 +18,7 @@ Route::get('/', function () {
 
 Route::resource('masterlist', 'MasterListController');
 Route::resource('masterlist.conversions', 'ConversionController');
-Route::resource('masterlist.pricetracking', 'MasterListPriceTrackingController');
+Route::resource('masterlist.statistics', 'MasterListStatisticsController');
 
 Route::resource('profile', 'UserProfileController');
 

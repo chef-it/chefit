@@ -9,7 +9,7 @@ use Auth;
 
 use App\Http\Requests;
 
-class MasterListPriceTrackingController extends Controller
+class MasterListStatisticsController extends Controller
 {
 
     /**
@@ -27,10 +27,10 @@ class MasterListPriceTrackingController extends Controller
      */
     public function index($id)
     {
-        $masterlist = Auth::user()->masterlist()->with('unit', 'priceTracking.unit')->find($id)
+        $masterlist = Auth::user()->masterlist()->find($id)
             ? : exit(redirect()->route('masterlist.index'));
-        
-        return view('masterlist.pricetracking.index')
+
+        return view('masterlist.statistics.index')
             ->withMasterlist($masterlist)
             ->withCurrencysymbol(DesignHelper::CurrencySymbol());
     }
@@ -42,7 +42,7 @@ class MasterListPriceTrackingController extends Controller
      */
     public function create($id)
     {
-        return redirect()->route('masterlist.pricetracking.index', $id);
+        return redirect()->route('masterlist.statistics.index', $id);
     }
 
     /**
@@ -64,7 +64,7 @@ class MasterListPriceTrackingController extends Controller
      */
     public function show($id)
     {
-        return redirect()->route('masterlist.pricetracking.index', $id);
+        return redirect()->route('masterlist.statistics.index', $id);
     }
 
     /**
@@ -75,7 +75,7 @@ class MasterListPriceTrackingController extends Controller
      */
     public function edit($id)
     {
-        return redirect()->route('masterlist.pricetracking.index', $id);
+        return redirect()->route('masterlist.statistics.index', $id);
     }
 
     /**
@@ -87,7 +87,7 @@ class MasterListPriceTrackingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return redirect()->route('masterlist.pricetracking.index', $id);
+        return redirect()->route('masterlist.statistics.index', $id);
     }
 
     /**
@@ -98,6 +98,6 @@ class MasterListPriceTrackingController extends Controller
      */
     public function destroy($id)
     {
-        return redirect()->route('masterlist.pricetracking.index', $id);
+        return redirect()->route('masterlist.statistics.index', $id);
     }
 }
