@@ -81,7 +81,7 @@ class DesignHelper
         }
 
         foreach ($ingredients as $ingredient) {
-            $select[$ingredient->vendor] = $ingredient->vendor;
+            $select['Vendor'][$ingredient->vendor] = $ingredient->vendor;
         }
 
         return $select;

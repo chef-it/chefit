@@ -22,6 +22,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/masterlist">Master List</a></li>
                 <li><a href="/recipes">Recipes</a></li>
+                <li><a href="/invoices">Invoices</a></li>
             </ul>
 
             <!-- Right Side Of Navbar -->
