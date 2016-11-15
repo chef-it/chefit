@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\DesignHelper;
+use App\Http\Requests\StoreInvoice;
 use App\Invoice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -48,7 +49,7 @@ class InvoiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreInvoice $request)
     {
         $invoice = new Invoice();
 
@@ -96,7 +97,7 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreInvoice $request, $id)
     {
         $invoice = Auth::user()->invoices()->find($id);
 
