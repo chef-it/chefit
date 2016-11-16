@@ -15,6 +15,8 @@ use App\User;
 Route::get('/', function () {
     return view('home');
 });
+Route::resource('invoices', 'InvoiceController');
+Route::resource('invoices.records', 'InvoiceRecordController');
 
 Route::resource('masterlist', 'MasterListController');
 Route::resource('masterlist.conversions', 'ConversionController');

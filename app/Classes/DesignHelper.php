@@ -50,21 +50,24 @@ class DesignHelper
      *
      * @return array
      */
-    public static function IngredientsDropDown($recipeID)
+    public static function IngredientsDropDown($recipeID = null, $recipes = true)
     {
         $ingredients = Auth::user()->masterlist->sortBy('name');
 
         foreach ($ingredients as $ingredient) {
             $select['Master List']['{"type":"masterlist","id":"'.$ingredient->id.'"}'] = $ingredient->name;
         }
-
-        $recipes = Auth::user()->recipes->sortBy('name');
-        foreach ($recipes as $recipe) {
-            //Exclude current recipe from list of sub-recipes
-            if ($recipe->id != $recipeID){
-                $select['Recipes']['{"type":"recipe","id":"'.$recipe->id.'"}'] = $recipe->name;
+        
+        if ($recipes) {
+            $recipes = Auth::user()->recipes->sortBy('name');
+            foreach ($recipes as $recipe) {
+                //Exclude current recipe from list of sub-recipes
+                if ($recipe->id != $recipeID){
+                    $select['Recipes']['{"type":"recipe","id":"'.$recipe->id.'"}'] = $recipe->name;
+                }
             }
         }
+        
 
         return $select;
     }
@@ -81,7 +84,7 @@ class DesignHelper
         }
 
         foreach ($ingredients as $ingredient) {
-            $select[$ingredient->vendor] = $ingredient->vendor;
+            $select['Vendor'][$ingredient->vendor] = $ingredient->vendor;
         }
 
         return $select;
