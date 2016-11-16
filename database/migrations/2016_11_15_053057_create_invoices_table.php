@@ -17,10 +17,14 @@ class CreateInvoicesTable extends Migration
             $table->increments('id');
             $table->string('vendor');
             $table->string('invoice_number');
-            $table->integer('user_id');
+            $table->integer('user_id', false, true);
             $table->decimal('grand_total', '10', '2');
             $table->date('date');
             $table->timestamps();
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

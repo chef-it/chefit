@@ -75,8 +75,8 @@ class MasterListController extends Controller
         }
         $masterlist->ap_small_price = Math::CalcApUnitCost($request->price, $request->ap_quantity, $request->ap_unit);
         $masterlist->user_id = Auth::user()->id;
-        $masterlist->vendor = $request->input('vendor');
-        $masterlist->category = $request->input('category');
+        $masterlist->vendor = $request->vendor;
+        $masterlist->category = $request->category;
 
         $masterlist->save();
 

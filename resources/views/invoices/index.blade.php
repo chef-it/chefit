@@ -12,7 +12,7 @@
         <div id="MasterList" class="col-md-12">
             <div class="block-flat">
                 <div class="header">
-                    <h3 class="text-center">Recipes</h3>
+                    <h3 class="text-center">Invoices</h3>
                     <hr>
                 </div>
                 <div class="content">
@@ -35,7 +35,7 @@
                                 <td>{{ $invoice->vendor }}</td>
                                 <td>{{ $invoice->grand_total }}</td>
                                 <td>{{ link_to_route('invoices.edit', 'Edit', [$invoice->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
-                                <td>{{ link_to_route('recipes.elements.index', 'View', 'id', ['class' => 'btn btn-xs btn-primary btn-block']) }}</td>
+                                <td>{{ link_to_route('invoices.records.index', 'View', $invoice->id, ['class' => 'btn btn-xs btn-primary btn-block']) }}</td>
                             </tr>
                         @endforeach
                         </tbody>
