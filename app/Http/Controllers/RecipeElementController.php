@@ -28,9 +28,9 @@ class RecipeElementController extends Controller
      */
     public function index($recipeId)
     {
+        //TODO: Break out from controller.
         // Get recipe name
-        $recipe = Auth::user()->recipes()->with('batchUnit')->find($recipeId)
-            ? : exit(redirect()->route('recipes.index'));
+        $recipe = Auth::user()->recipes()->with('batchUnit')->findOrFail($recipeId);
 
         $recipe->menu_price = number_format($recipe->menu_price, 2);
         $recipe->data = Math::CalcRecipeData($recipe->id);
@@ -138,8 +138,7 @@ class RecipeElementController extends Controller
      */
     public function edit($recipeID, $id)
     {
-        $element = Auth::user()->recipes()->find($recipeID)->elements()->find($id)
-            ? : exit(redirect()->route('recipes.index'));
+        $element = Auth::user()->recipes()->findOrFail($recipeID)->elements()->findOrFail($id);
         $element->quantity = $element->quantity + 0;
 
         if ($element->type == 'masterlist') {
@@ -163,8 +162,7 @@ class RecipeElementController extends Controller
      */
     public function update(Requests\StoreRecipeComponent $request, $recipe, $id)
     {
-        $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
-            ? : exit(redirect()->route('recipes.index'));
+        $element = Auth::user()->recipes()->find($recipe)->elements()->findOrFail($id);
 
         $ingredientData = json_decode($request->ingredient);
         if ($ingredientData->type == 'masterlist') {
@@ -191,8 +189,7 @@ class RecipeElementController extends Controller
      */
     public function destroy($recipe, $id)
     {
-        $element = Auth::user()->recipes()->find($recipe)->elements()->find($id)
-            ? : exit(redirect()->route('recipes.index'));
+        $element = Auth::user()->recipes()->find($recipe)->elements()->findOrFail($id);
         $element->delete();
         return redirect()->route('recipes.elements.index', $recipe);
     }

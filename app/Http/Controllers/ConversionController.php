@@ -51,8 +51,7 @@ class ConversionController extends Controller
      */
     public function create($id)
     {
-        $masterlist = Auth::user()->masterlist()->find($id)
-            ? : exit(redirect()->route('masterlist.index'));
+        $masterlist = Auth::user()->masterlist()->findOrFail($id);
         return view('masterlist.conversions.create')
             ->withUnits(DesignHelper::UnitsDropDown())
             ->withMasterlist($masterlist);
@@ -66,12 +65,11 @@ class ConversionController extends Controller
      */
     public function store(Requests\StoreMasterListConversion $request, $masterlistid)
     {
-        $masterlist = Auth::user()->masterlist()->find($masterlistid)
-            ? : exit(redirect()->route('masterlist.index'));
+        $masterlist = Auth::user()->masterlist()->find($masterlistid);
 
         $conversion = new Conversion();
 
-        $conversion->master_list_id = $masterlist;
+        $conversion->master_list_id = $masterlistid;
         $conversion->left_quantity = $request->left_quantity;
         $conversion->left_unit = $request->left_unit;
         $conversion->right_quantity = $request->right_quantity;
@@ -106,10 +104,8 @@ class ConversionController extends Controller
     public function edit($id)
     {
         //Get Master List and Conversion by user or return to index if not found.
-        $masterlist = Auth::user()->masterlist()->find($id)
-            ? : exit(redirect()->route('masterlist.index'));
-        $conversion = Auth::user()->masterlist()->find($id)->conversion()->first()
-            ? : exit(redirect()->route('masterlist.index'));
+        $masterlist = Auth::user()->masterlist()->findOrFail($id);
+        $conversion = Auth::user()->masterlist()->findOrFail($id)->conversion()->first();
         $conversion->left_quantity += 0;
         $conversion->right_quantity += 0;
 
@@ -128,8 +124,7 @@ class ConversionController extends Controller
      */
     public function update(Requests\StoreMasterListConversion $request, $masterlist, $id)
     {
-        $conversion = Auth::user()->masterlist()->find($masterlist)->conversion()->first()
-            ? : exit(redirect()->route('masterlist.index'));
+        $conversion = Auth::user()->masterlist()->find($masterlist)->conversion()->firstOrFail();
 
         $conversion->left_quantity = $request->left_quantity;
         $conversion->left_unit = $request->left_unit;

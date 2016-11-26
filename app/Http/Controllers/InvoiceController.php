@@ -72,7 +72,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        //
+        return redirect()->route('invoices.index');
     }
 
     /**
@@ -83,7 +83,7 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $invoice = Auth::user()->invoices()->find($id);
+        $invoice = Auth::user()->invoices()->findOrFail($id);
         return view('invoices.edit')
             ->withUnits(DesignHelper::UnitsDropDown())
             ->withVendors(DesignHelper::VendorsDropDown())
@@ -99,7 +99,7 @@ class InvoiceController extends Controller
      */
     public function update(StoreInvoice $request, $id)
     {
-        $invoice = Auth::user()->invoices()->find($id);
+        $invoice = Auth::user()->invoices()->findOrFail($id);
 
         $invoice->date = $request->date;
         $invoice->vendor = $request->vendor;
@@ -120,6 +120,6 @@ class InvoiceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //TODO
     }
 }

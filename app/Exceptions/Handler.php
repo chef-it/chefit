@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -44,6 +45,25 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        if($exception instanceof ModelNotFoundException) {
+            $pause = 1;
+            switch ($exception->getModel()) {
+                case 'app\MasterList':
+                    $route = 'masterlist.index';
+                    break;
+                case 'app\Recipe' || 'app\RecipeElement':
+                    $route = 'recipes.index';
+                    break;
+                case 'App\Invoice' || 'App\InvoiceRecord':
+                    $route = 'invoices.index';
+                    break;
+                default:
+                    dd($exception->getModel());
+            }
+            return redirect()->route($route);
+        }
+
         return parent::render($request, $exception);
     }
 

@@ -14,7 +14,7 @@ use App\User;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 Route::resource('invoices', 'InvoiceController');
 Route::resource('invoices.records', 'InvoiceRecordController');
 

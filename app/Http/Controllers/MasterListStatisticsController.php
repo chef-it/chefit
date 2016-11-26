@@ -27,8 +27,7 @@ class MasterListStatisticsController extends Controller
      */
     public function index($id)
     {
-        $masterlist = Auth::user()->masterlist()->find($id)
-            ? : exit(redirect()->route('masterlist.index'));
+        $masterlist = Auth::user()->masterlist()->findOrFail($id);
 
         return view('masterlist.statistics.index')
             ->withMasterlist($masterlist)

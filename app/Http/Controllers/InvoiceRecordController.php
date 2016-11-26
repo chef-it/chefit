@@ -21,8 +21,7 @@ class InvoiceRecordController extends Controller
      */
     public function index($invoice)
     {
-        $invoice = Auth::user()->invoices()->find($invoice);
-        $pause = 1;
+        $invoice = Auth::user()->invoices()->findOrFail($invoice);
         return view('invoices.records.index')
             ->withInvoice($invoice)
             ->withCurrencysymbol(DesignHelper::CurrencySymbol())
@@ -49,7 +48,7 @@ class InvoiceRecordController extends Controller
      */
     public function store(StoreInvoiceRecord $request, $invoiceId)
     {
-        $invoice = Auth::user()->invoices()->find($invoiceId);
+        $invoice = Auth::user()->invoices()->findOrFail($invoiceId);
         $masterlistData = json_decode($request->masterlist);
         $record = new InvoiceRecord();
 
@@ -170,8 +169,8 @@ class InvoiceRecordController extends Controller
      */
     public function destroy($invoiceId, $recordId)
     {
-        $invoice = Auth::user()->invoices()->find($invoiceId);
-        $record = $invoice->records()->find($recordId);
+        $invoice = Auth::user()->invoices()->findOrFail($invoiceId);
+        $record = $invoice->records()->findOrFail($recordId);
 
         $invoice->grand_total = $invoice->grand_total - $record->price;
         $invoice->save();

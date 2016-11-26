@@ -13,7 +13,7 @@ use Auth;
  * Class Math
  * @package App\Classes
  */
-class Math
+abstract class Math
 {
 
     /**

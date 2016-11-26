@@ -103,8 +103,7 @@ class MasterListController extends Controller
      */
     public function edit($id)
     {
-        $masterlist = Auth::user()->masterlist()->find($id)
-            ? : redirect()->route('masterlist.index');
+        $masterlist = Auth::user()->masterlist()->findOrFail($id);
 
         return view('masterlist.edit')
             ->withMasterlist($masterlist)
@@ -123,8 +122,7 @@ class MasterListController extends Controller
      */
     public function update(Requests\StoreMasterList $request, $id)
     {
-        $masterlist = Auth::user()->masterlist()->find($id) 
-            ? : exit(redirect()->route(masterlist.index));
+        $masterlist = Auth::user()->masterlist()->findOrFail($id);
 
         //Send current price data to price tracking before updating new data if there are any pricing changes
         if ($masterlist->price != $request->price ||
@@ -171,7 +169,7 @@ class MasterListController extends Controller
      */
     public function destroy($id)
     {
-        $masterlist = Auth::user()->masterlist()->find($id) 
+        $masterlist = Auth::user()->masterlist()->findOrFail($id) 
             ? : exit(redirect()->route('masterlist.index'));
         $masterlist->delete();
         return redirect()->route('masterlist.index');

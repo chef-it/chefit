@@ -105,8 +105,7 @@ class RecipeController extends Controller
      */
     public function edit($id)
     {
-        $recipe = $recipes = Auth::user()->recipes()->find($id)
-            ? : exit(redirect()->route('recipes.index'));
+        $recipe = $recipes = Auth::user()->recipes()->findOrFail($id);
         $recipe->portions_per_batch = $recipe->portions_per_batch + 0;
         $recipe->batch_quantity = $recipe->batch_quantity + 0;
         return view('recipes.edit')
@@ -125,8 +124,7 @@ class RecipeController extends Controller
      */
     public function update(Requests\StoreRecipe $request, $id)
     {
-        $recipe = $recipes = Auth::user()->recipes()->find($id)
-            ? : exit(redirect()->route('recipes.index'));
+        $recipe = $recipes = Auth::user()->recipes()->findOrFail($id);
 
         $recipe->name = $request->name;
 
@@ -154,8 +152,7 @@ class RecipeController extends Controller
     }
     
     public function instructions(Request $request, $id){
-        $recipe = Auth::user()->recipes()->find($id)
-            ? : exit(redirect()->route('recipes.index'));
+        $recipe = Auth::user()->recipes()->findOrFail($id);
         $recipe->instructions = $request->instructions;
         $recipe->save();
 
@@ -170,8 +167,7 @@ class RecipeController extends Controller
      */
     public function destroy($id)
     {
-        $recipe = $recipes = Auth::user()->recipes()->find($id)
-            ? : exit(redirect()->route('recipes.index'));
+        $recipe = $recipes = Auth::user()->recipes()->findOrFail($id);
         $recipe->delete();
         return redirect()->route('recipes.index');
     }
