@@ -61,7 +61,7 @@ class InvoiceController extends Controller
 
         $invoice->save();
 
-        return redirect()->route('invoices.index');
+        return redirect()->route('invoices.records.index', $invoice->id);
     }
 
     /**

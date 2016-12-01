@@ -54,6 +54,8 @@ class DesignHelper
     {
         $ingredients = Auth::user()->masterlist->sortBy('name');
 
+        $select = array();
+
         foreach ($ingredients as $ingredient) {
             $select['Master List']['{"type":"masterlist","id":"'.$ingredient->id.'"}'] = $ingredient->name;
         }

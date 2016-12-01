@@ -92,7 +92,7 @@
                     <div class="panel-body">
                         {{ Form::open(['route' => ['recipes.instructions', $recipe->id], 'method' => 'PUT']) }}
                         {{ Form::textarea('instructions', $recipe->instructions, array('class' => 'form-control', 'id' => 'instructions')) }}
-                        {{ Form::submit('Save', array('class' => 'btn btn-success btn-block')) }}
+                        {{ Form::submit('Save Instructions', array('class' => 'btn btn-success btn-block')) }}
                         {{ Form::close() }}
                     </div>
                 </div>
