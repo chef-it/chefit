@@ -25,9 +25,9 @@ class MasterListStatisticsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index(MasterList $masterlist)
     {
-        $masterlist = Auth::user()->masterlist()->findOrFail($id);
+        $this->authorize('masterlist', $masterlist);
 
         return view('masterlist.statistics.index')
             ->withMasterlist($masterlist)
