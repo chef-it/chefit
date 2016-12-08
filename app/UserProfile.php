@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserProfile extends Model
 {
     protected $fillable = [
-        'user_id', 'metric', 'currency',
+        'user_id', 
+        'metric', 
+        'currency',
     ];
 }

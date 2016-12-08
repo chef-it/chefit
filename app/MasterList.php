@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class MasterList extends Model
 {
     protected $table = 'master_list';
+
+    protected $fillable = [
+        'name',
+        'price',
+        'ap_quantity',
+        'ap_unit',
+        'yield',
+        'ap_small_price',
+        'vendor',
+        'category'
+    ];
     
     public function conversion()
     {
@@ -27,4 +38,10 @@ class MasterList extends Model
     {
         return $this->hasMany('App\RecipeElement');
     }
+
+    public function getYieldAttribute($yield)
+    {
+        return $yield * 100;
+    }
+    
 }
