@@ -17,9 +17,9 @@ class MasterListPolicy
      * @param  \App\MasterList  $masterList
      * @return mixed
      */
-    public function view(User $user, MasterList $masterList)
+    public function masterlist(User $user, MasterList $masterList)
     {
-        //
+        return $user->id === $masterList->user_id;
     }
 
     /**

@@ -39,6 +39,11 @@ class MasterList extends Model
         return $this->hasMany('App\RecipeElement');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     public function getYieldAttribute($yield)
     {
         return $yield * 100;

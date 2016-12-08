@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Controller\ConversionHelper;
 use App\Classes\DesignHelper;
-use App\Classes\Math;
 use App\Conversion;
 use App\MasterList;
-use App\Recipe;
-use Illuminate\Http\Request;
 use Auth;
 
 use App\Http\Requests;
@@ -15,12 +13,15 @@ use App\Http\Requests;
 class ConversionController extends Controller
 {
 
+    protected $helper;
+    
     /**
      * Instantiate a new MasterListController instance.
      */
-    public function __construct()
+    public function __construct(ConversionHelper $helper)
     {
         $this->middleware('auth');
+        $this->helper = $helper;
     }
 
     /**
@@ -28,18 +29,18 @@ class ConversionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index(MasterList $masterlist)
     {
-        $conversion = Auth::user()->masterlist()->find($id)->conversion()->first();
+        $this->authorize('masterlist', $masterlist);
 
-        if (count($conversion) > 0) {
+        if (count($masterlist->conversion) > 0) {
             return redirect()->route(
                 'masterlist.conversions.edit',
-                ['masterlist' => $id, 'conversion' => $conversion->id]
+                ['masterlist' => $masterlist->id, 'conversion' => $masterlist->conversion->id]
             );
         } else {
             return redirect()->action(
-                'ConversionController@create', ['id' => $id]
+                'ConversionController@create', ['id' => $masterlist->id]
             );
         }
     }
@@ -49,9 +50,9 @@ class ConversionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create(MasterList $masterlist)
     {
-        $masterlist = Auth::user()->masterlist()->findOrFail($id);
+        $this->authorize('masterlist', $masterlist);
         return view('masterlist.conversions.create')
             ->withUnits(DesignHelper::UnitsDropDown())
             ->withMasterlist($masterlist);
@@ -63,24 +64,18 @@ class ConversionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\StoreMasterListConversion $request, $masterlistid)
+    public function store(
+        Requests\StoreMasterListConversion $request,
+        MasterList $masterlist,
+        Conversion $conversion
+    )
     {
-        $masterlist = Auth::user()->masterlist()->find($masterlistid);
-
-        $conversion = new Conversion();
-
-        $conversion->master_list_id = $masterlistid;
-        $conversion->left_quantity = $request->left_quantity;
-        $conversion->left_unit = $request->left_unit;
-        $conversion->right_quantity = $request->right_quantity;
-        $conversion->right_unit = $request->right_unit;
-        $conversion->user_id = Auth::user()->id;
-
-        $conversion->save();
+        $this->authorize('masterlist', $masterlist);
+        $this->helper->store($conversion, $request, $masterlist);
 
         return redirect()->route(
             'masterlist.conversions.edit',
-            ['masterlist' => $masterlistid, 'conversion' => $conversion->id]
+            ['masterlist' => $masterlist->id, 'conversion' => $conversion->id]
         );
     }
 
@@ -101,13 +96,10 @@ class ConversionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(MasterList $masterlist)
     {
-        //Get Master List and Conversion by user or return to index if not found.
-        $masterlist = Auth::user()->masterlist()->findOrFail($id);
-        $conversion = Auth::user()->masterlist()->findOrFail($id)->conversion()->first();
-        $conversion->left_quantity += 0;
-        $conversion->right_quantity += 0;
+        $this->authorize('masterlist', $masterlist);
+        $conversion = $masterlist->conversion()->first();
 
         return view('masterlist.conversions.edit')
             ->withUnits(DesignHelper::UnitsDropDown())
@@ -122,20 +114,18 @@ class ConversionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\StoreMasterListConversion $request, $masterlist, $id)
+    public function update(
+        Requests\StoreMasterListConversion $request,
+        MasterList $masterlist,
+        Conversion $conversion
+    )
     {
-        $conversion = Auth::user()->masterlist()->find($masterlist)->conversion()->firstOrFail();
-
-        $conversion->left_quantity = $request->left_quantity;
-        $conversion->left_unit = $request->left_unit;
-        $conversion->right_quantity = $request->right_quantity;
-        $conversion->right_unit = $request->right_unit;
-
-        $conversion->save();
+        $this->authorize('masterlist', $masterlist);
+        $this->helper->store($conversion, $request, $masterlist);
 
         return redirect()->route(
             'masterlist.conversions.edit',
-            ['masterlist' => $masterlist, 'conversion' => $id]
+            ['masterlist' => $masterlist, 'conversion' => $conversion->id]
         );
     }
 
