@@ -3,9 +3,12 @@
 namespace app;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MasterList extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'master_list';
 
     protected $fillable = [
@@ -18,6 +21,13 @@ class MasterList extends Model
         'vendor',
         'category'
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
     
     public function conversion()
     {
