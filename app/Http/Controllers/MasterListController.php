@@ -84,7 +84,7 @@ class MasterListController extends Controller
      */
     public function edit(MasterList $masterlist)
     {
-        $this->authorize('edit', $masterlist);
+        $this->authorize('masterlist', $masterlist);
         
         return view('masterlist.edit')
             ->withMasterlist($masterlist)
@@ -103,7 +103,7 @@ class MasterListController extends Controller
      */
     public function update(Requests\StoreMasterList $request, MasterList $masterlist)
     {
-        $this->authorize('update', $masterlist);
+        $this->authorize('masterlist', $masterlist);
         $this->helper->updatePriceTracking($masterlist, $request);
         $this->helper->store($masterlist, $request);
         
@@ -118,7 +118,7 @@ class MasterListController extends Controller
      */
     public function destroy(MasterList $masterlist)
     {
-        $this->authorize('destroy', $masterlist);
+        $this->authorize('masterlist', $masterlist);
         $masterlist->delete();
         return redirect()->route('masterlist.index');
     }

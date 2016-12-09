@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use app\Conversion;
+use App\Invoice;
 use app\MasterList;
 use App\Policies\ConversionPolicy;
+use App\Policies\InvoicePolicy;
 use App\Policies\MasterListPolicy;
 use App\Policies\RecipePolicy;
 use app\Recipe;
@@ -21,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
         MasterList::class => MasterListPolicy::class,
+        Invoice::class => InvoicePolicy::class,
     ];
 
     /**

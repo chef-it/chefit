@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Controller\InvoiceHelper;
 use App\Classes\DesignHelper;
 use App\Http\Requests\StoreInvoice;
 use App\Invoice;
@@ -11,12 +12,16 @@ use Auth;
 
 class InvoiceController extends Controller
 {
+
+    protected $helper;
+
     /**
      * Instantiate a new InvoiceController instance.
      */
-    public function __construct()
+    public function __construct(InvoiceHelper $helper)
     {
         $this->middleware('auth');
+        $this->helper = $helper;
     }
 
     /**
@@ -49,17 +54,9 @@ class InvoiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreInvoice $request)
+    public function store(StoreInvoice $request, Invoice $invoice)
     {
-        $invoice = new Invoice();
-
-        $invoice->date = $request->date;
-        $invoice->vendor = $request->vendor;
-        $invoice->invoice_number = $request->invoice_number;
-        $invoice->user_id = Auth::user()->id;
-        $invoice->grand_total = 0;
-
-        $invoice->save();
+        $this->helper->store($invoice, $request);
 
         return redirect()->route('invoices.records.index', $invoice->id);
     }
@@ -81,9 +78,9 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Invoice $invoice)
     {
-        $invoice = Auth::user()->invoices()->findOrFail($id);
+        $this->authorize('invoice', $invoice);
         return view('invoices.edit')
             ->withUnits(DesignHelper::UnitsDropDown())
             ->withVendors(DesignHelper::VendorsDropDown())
@@ -97,17 +94,10 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreInvoice $request, $id)
+    public function update(StoreInvoice $request, Invoice $invoice)
     {
-        $invoice = Auth::user()->invoices()->findOrFail($id);
-
-        $invoice->date = $request->date;
-        $invoice->vendor = $request->vendor;
-        $invoice->invoice_number = $request->invoice_number;
-        $invoice->user_id = Auth::user()->id;
-        $invoice->grand_total = 0;
-
-        $invoice->save();
+        $this->authorize('invoice', $invoice);
+        $this->helper->store($invoice, $request);
 
         return redirect()->route('invoices.index');
     }
@@ -118,8 +108,10 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Invoice $invoice)
     {
-        //TODO
+        $this->authorize('invoice', $invoice);
+        $invoice->delete();
+        return redirect()->route('invoice.index');
     }
 }
