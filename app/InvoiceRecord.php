@@ -8,7 +8,7 @@ class InvoiceRecord extends Model
 {
     public function masterlist()
     {
-        return $this->hasOne('App\MasterList', 'id', 'master_list_id');
+        return $this->hasOne('App\MasterList', 'id', 'master_list_id')->withTrashed();
     }
 
     public function unit()

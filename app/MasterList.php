@@ -54,6 +54,11 @@ class MasterList extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function InvoiceRecord()
+    {
+        return $this->belongsTo('App\InvoiceRecord')->withTrashed();
+    }
+
     public function getYieldAttribute($yield)
     {
         return $yield * 100;
