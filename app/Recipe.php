@@ -12,7 +12,7 @@ class Recipe extends Model
 
     public function getDataAttribute()
     {
-        return Math::CalcRecipeData($this->id);
+        return Math::CalcRecipeData($this);
     }
 
     public function getPortionsPerBatchAttribute($value)

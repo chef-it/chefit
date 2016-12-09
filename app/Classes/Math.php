@@ -47,6 +47,8 @@ abstract class Math
         // Get units record for $unit
         $outputUnit = Unit::find($unit);
 
+        $pause = 1;
+
         // If a weight-volume conversion is required
         if ($inputUnit->weight != $outputUnit->weight) {
             // Get conversion from database with measurement unit details included.
@@ -115,7 +117,8 @@ abstract class Math
         // return. Previous functions should have converted everything already, the if statement is a
         // double check.  TODO: change dump to error after weight <-> volume implemented.
         if ($inputUnit->system == $outputUnit->system && $inputUnit->weight == $outputUnit->weight) {
-            return $ingredient->ap_small_price * $outputUnit->factor * $ingredient->yield * $quantity;
+            $pause = 1;
+            return $ingredient->ap_small_price * $outputUnit->factor * $ingredient->yield * $quantity / 100;
         } else {
             die(dump('Let Dale know this shouldn\'t have happened'));
         }
@@ -163,19 +166,19 @@ abstract class Math
      * @param $recipeID
      * @return string
      */
-    public static function CalcRecipeData($recipeID)
+    public static function CalcRecipeData(Recipe $recipe)
     {
         $data = collect();
-        $recipe = Recipe::find($recipeID);
-        $data->cost = number_format(Math::CalcRecipeCost($recipeID), 2);
+        $data->cost = number_format(Math::CalcRecipeCost($recipe->id), 2);
+        $data->portionPrice = $data->cost / $recipe->portions_per_batch;
 
         if ($recipe->menu_price == 0) {
             $data->costPercent = 0;
         } else {
+            // Divide total cost by menu price and return percentage.
             $data->costPercent = number_format(($data->cost / $recipe->menu_price * 100), 2);
         }
 
-        // Divide total cost by menu price and return percentage.
         return $data;
     }
     

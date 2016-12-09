@@ -25,4 +25,9 @@ class RecipeElement extends Model
     {
         return $this->hasOne('App\Recipe', 'id', 'recipe_id');
     }
+
+    public function getQuantityAttribute($value)
+    {
+        return $value + 0;
+    }
 }
