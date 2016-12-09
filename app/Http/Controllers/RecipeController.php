@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Controller\RecipeHelper;
 use App\Recipe;
-use App\RecipeElement;
 use Illuminate\Http\Request;
 use App\Classes\Math;
 use App\Classes\DesignHelper;
@@ -13,12 +13,15 @@ use App\Http\Requests;
 
 class RecipeController extends Controller
 {
+    protected $helper;
+    
     /**
      * Instantiate a new RecipeController instance.
      */
-    public function __construct()
+    public function __construct(RecipeHelper $helper)
     {
         $this->middleware('auth');
+        $this->helper = $helper;
     }
 
     /**
@@ -29,11 +32,6 @@ class RecipeController extends Controller
     public function index()
     {
         $recipes = Auth::user()->recipes;
-
-        foreach ($recipes as $recipe) {
-            $recipe->data = Math::CalcRecipeData($recipe->id);
-            $recipe->menu_price = number_format($recipe->menu_price, 2);
-        }
 
         return view('recipes.index')
             ->withRecipes($recipes)
@@ -59,29 +57,9 @@ class RecipeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\StoreRecipe $request)
+    public function store(Requests\StoreRecipe $request, Recipe $recipe)
     {
-        $recipe = new Recipe();
-
-        $recipe->name = $request->name;
-
-        if ($request->menu_price == '') {
-            $recipe->menu_price = null;
-        } else {
-            $recipe->menu_price = $request->menu_price;
-        }
-
-        $recipe->portions_per_batch = $request->portions_per_batch;
-        $recipe->batch_quantity = $request->batch_quantity;
-        $recipe->batch_unit = $request->batch_unit;
-        if ($request->component_only == null) {
-            $recipe->component_only = 0;
-        } else {
-            $recipe->component_only = $request->component_only;
-        }
-        $recipe->user_id = Auth::user()->id;
-
-        $recipe->save();
+        $this->helper->store($recipe, $request);
 
         return redirect()->route('recipes.elements.index', $recipe->id);
     }
@@ -103,11 +81,9 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Recipe $recipe)
     {
-        $recipe = $recipes = Auth::user()->recipes()->findOrFail($id);
-        $recipe->portions_per_batch = $recipe->portions_per_batch + 0;
-        $recipe->batch_quantity = $recipe->batch_quantity + 0;
+        $this->authorize('recipe', $recipe);
         return view('recipes.edit')
             ->withRecipe($recipe)
             ->withUnits(DesignHelper::UnitsDropDown())
@@ -122,41 +98,20 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\StoreRecipe $request, $id)
+    public function update(Requests\StoreRecipe $request, Recipe $recipe)
     {
-        $recipe = $recipes = Auth::user()->recipes()->findOrFail($id);
-
-        $recipe->name = $request->name;
-
-        if ($request->menu_price == '') {
-            $recipe->menu_price = null;
-        } else {
-            $recipe->menu_price = $request->menu_price;
-        }
-
-        $recipe->portions_per_batch = $request->portions_per_batch;
-        $recipe->batch_quantity = $request->batch_quantity;
-        $recipe->batch_unit = $request->batch_unit;
-
-        if ($request->component_only == null) {
-            $recipe->component_only = 0;
-        } else {
-            $recipe->component_only = $request->component_only;
-        }
-        
-        $recipe->user_id = Auth::user()->id;
-
-        $recipe->save();
+        $this->authorize('recipe', $recipe);
+        $this->helper->store($recipe, $request);
 
         return redirect()->route('recipes.index');
     }
     
-    public function instructions(Request $request, $id){
-        $recipe = Auth::user()->recipes()->findOrFail($id);
+    public function instructions(Request $request, Recipe $recipe){
+        $this->authorize('recipe', $recipe);
         $recipe->instructions = $request->instructions;
         $recipe->save();
 
-        return redirect()->route('recipes.elements.index', $id);
+        return redirect()->route('recipes.elements.index', $recipe->id);
     }
 
     /**
@@ -165,9 +120,9 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Recipe $recipe)
     {
-        $recipe = $recipes = Auth::user()->recipes()->findOrFail($id);
+        $this->authorize('recipe', $recipe);
         $recipe->delete();
         return redirect()->route('recipes.index');
     }
