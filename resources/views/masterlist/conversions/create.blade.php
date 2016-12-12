@@ -14,8 +14,8 @@
                     <h3 class="panel-title">{{ $masterlist->name }} Conversion</h3>
                 </div>
                 <div class="panel-body">
+                    {!! Form::open(['route' => ['masterlist.conversions.store', Request::segment(2)]]) !!}
                     <div class="row">
-                        {!! Form::open(['route' => ['masterlist.conversions.store', Request::segment(2)]]) !!}
                         <div class="form-group col-md-6" id="left">
                             {{ Form::label('left', 'Measurement One: ') }}
                             {{ Form::text('left_quantity', null, array('class' => 'form-control', 'autocomplete' => 'off', 'required' => 'required')) }}
@@ -34,9 +34,9 @@
                         </div>
                         <div class="col-md-6">
                             {{ Form::submit('Update', array('class' => 'btn btn-success btn-block')) }}
-                            {{ Form::close() }}
                         </div>
                     </div>
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

@@ -47,8 +47,6 @@ abstract class Math
         // Get units record for $unit
         $outputUnit = Unit::find($unit);
 
-        $pause = 1;
-
         // If a weight-volume conversion is required
         if ($inputUnit->weight != $outputUnit->weight) {
             // Get conversion from database with measurement unit details included.
@@ -69,7 +67,6 @@ abstract class Math
                     // set up doesn't account for measurements entered into to recipe ingredient.
                     return -1;
                 }
-                $pause = 2;
             } else {
                 // Return -1 to trigger button on recipes.elements.index letting the user know there isn't a conversion
                 // set up.
@@ -117,7 +114,6 @@ abstract class Math
         // return. Previous functions should have converted everything already, the if statement is a
         // double check.  TODO: change dump to error after weight <-> volume implemented.
         if ($inputUnit->system == $outputUnit->system && $inputUnit->weight == $outputUnit->weight) {
-            $pause = 1;
             return $ingredient->ap_small_price * $outputUnit->factor * $ingredient->yield * $quantity / 100;
         } else {
             die(dump('Let Dale know this shouldn\'t have happened'));

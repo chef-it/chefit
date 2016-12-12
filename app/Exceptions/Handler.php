@@ -47,7 +47,6 @@ class Handler extends ExceptionHandler
     {
 
         if($exception instanceof ModelNotFoundException) {
-            $pause = 1;
             switch ($exception->getModel()) {
                 case 'app\MasterList':
                     $route = 'masterlist.index';

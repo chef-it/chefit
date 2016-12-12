@@ -33,7 +33,7 @@
                     <hr style="margin-top: 6px">
                     <div class="row">
                         <div class="col-md-6">
-                            <a href="/masterlist" class="btn btn-danger btn-block"><< Back</a>
+                            <a href="/masterlist" class="btn btn-danger btn-block" name="back"><< Back</a>
                         </div>
                         <div class="col-md-6">
                             {{ Form::submit('Update', array('class' => 'btn btn-success btn-block')) }}
