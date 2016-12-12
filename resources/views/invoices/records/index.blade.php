@@ -34,8 +34,10 @@
                         <tr>
                             <th class="col-md-2">Category</th>
                             <th class="col-md-4" data-priority="1">Ingredient</th>
-                            <th class="col-md-2">Quantity</th>
-                            <th class="col-md-2" data-priority="1">Cost</th>
+                            <th class="col-md-1">Quantity</th>
+                            <th class="col-md-1">Unit Size</th>
+                            <th class="col-md-1">Unit Cost</th>
+                            <th class="col-md-1" data-priority="1"> Total Cost</th>
                             <th class="col-md-2"></th>
                         </tr>
                         </thead>
@@ -44,8 +46,10 @@
                             <tr>
                                 <td>{{ $record->category }}</td>
                                 <td>{{ $record->masterlist->name }}</td>
+                                <td>{{ $record->line_quantity }}</td>
                                 <td>{{ $record->ap_quantity }} {{ $record->unit->name }}</td>
                                 <td>{{ $currencysymbol }} {{ $record->price }}</td>
+                                <td>{{ $currencysymbol }} {{ $record->total_price }}</td>
                                 <td>
                                     {!! Form::open(['route' => ['invoices.records.destroy', $invoice->id, $record->id], 'method' => 'DELETE']) !!}
                                     {!! Form::submit('Delete', ['class' => 'btn btn-xs btn-danger btn-block']) !!}

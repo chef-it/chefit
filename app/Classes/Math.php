@@ -174,7 +174,7 @@ abstract class Math
     {
         $data = collect();
         $data->cost = number_format(Math::CalcRecipeCost($recipe->id), 2);
-        $data->portionPrice = number_format($data->cost / $recipe->portions_per_batch, 4);
+        $data->portionPrice = number_format($data->cost / $recipe->portions_per_batch, 2);
 
         if ($recipe->menu_price == 0) {
             $data->costPercent = 0;

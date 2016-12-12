@@ -102,7 +102,7 @@ class InvoiceRecordController extends Controller
      */
     public function destroy(Invoice $invoice, InvoiceRecord $record)
     {
-        $invoice->grand_total = $invoice->grand_total - $record->price;
+        $invoice->grand_total = $invoice->grand_total - $record->total_price;
         $invoice->save();
         $record->delete();
 

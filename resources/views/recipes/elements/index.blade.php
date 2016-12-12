@@ -23,7 +23,8 @@
                             <th class="col-md-4" data-priority="1">Ingredient</th>
                             <th class="col-md-1">Quantity</th>
                             <th class="col-md-1" data-priority="1">Cost</th>
-                            <th class="col-md-2"></th>
+                            <th class="col-md-1"></th>
+                            <th class="col-md-1"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -37,16 +38,12 @@
                                 <td>{{ $element->quantity }} {{ $element->unit->name }}</td>
                                 <td>{{ $currencysymbol }}{{ $element->cost }}</td>
                                 <td>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            {{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe_id, $element->id], ['class' => 'btn btn-xs btn-info btn-block']) }}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe_id, $element->id], 'method' => 'DELETE']) !!}
-                                            {!! Form::submit('Delete', ['class' => 'btn btn-xs btn-danger btn-block']) !!}
-                                            {!! Form::close() !!}
-                                        </div>
-                                    </div>
+                                    {{ link_to_route('recipes.elements.edit', 'Edit', [$element->recipe_id, $element->id], ['class' => 'btn btn-xs btn-info btn-block']) }}
+                                </td>
+                                <td>
+                                    {!! Form::open(['route' => ['recipes.elements.destroy',$element->recipe_id, $element->id], 'method' => 'DELETE']) !!}
+                                    {!! Form::submit('Delete', ['class' => 'btn btn-xs btn-danger btn-block']) !!}
+                                    {!! Form::close() !!}
                                 </td>
                             </tr>
                         @endforeach
@@ -75,11 +72,11 @@
                         <p class="col-xs-4">{{ $currencysymbol }}{{ $recipe->data->cost }}</p>
                         <p class="col-xs-8">Batch Size</p>
                         <p class="col-xs-4">{{ $recipe->batch_quantity }} {{ $recipe->batchUnit->name }}</p>
-                        @if ($recipe->batch_unit != 16)
+                        @if ($recipe->batch_unit != 16 && $recipe->portions_per_batch > 1)
                         <p class="col-xs-8">Portions</p>
                         <p class="col-xs-4">{{ $recipe->portions_per_batch }}</p>
                         <p class="col-xs-8">Price Per Portion</p>
-                        <p class="col-xs-4">{{ $recipe->data->portionPrice }}</p>
+                        <p class="col-xs-4">{{ $currencysymbol }}{{ $recipe->data->portionPrice }}</p>
                         @endif
                     </div>
                 </div>

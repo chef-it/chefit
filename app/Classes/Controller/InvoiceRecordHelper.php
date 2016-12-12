@@ -76,6 +76,8 @@ class InvoiceRecordHelper
         }
 
         $record->price = $request->price;
+        $record->line_quantity = $request->line_quantity;
+        $record->total_price = $request->line_quantity * $request->price;
         $record->ap_quantity = $request->ap_quantity;
         $record->ap_unit = $request->ap_unit;
         $record->invoice_id = $invoice->id;
@@ -83,7 +85,7 @@ class InvoiceRecordHelper
         $record->category = $request->category;
         $record->save();
         
-        $invoice->grand_total += $record->price;
+        $invoice->grand_total += $record->total_price;
         $invoice->save();
     }
 }

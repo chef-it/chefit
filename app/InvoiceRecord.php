@@ -15,4 +15,9 @@ class InvoiceRecord extends Model
     {
         return $this->hasOne('App\Unit', 'id', 'ap_unit');
     }
+
+    public function getLineQuantityAttribute($value)
+    {
+        return $value + 0;
+    }
 }
