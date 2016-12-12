@@ -6,17 +6,16 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\User;
 
 /** Quick and garbage test until real ones are written */
-class MasterList extends TestCase
+class Application extends TestCase
 {
     /** @test */
-    public function run_through_masterlist_pages()
+    public function run_through_pages()
     {
-        $user = $user = User::find(8);
+        $this->actingAs(User::find(8));
 
         $ingredient = factory(App\MasterList::class)->make();
 
-        $this->actingAs($user)
-            ->visit('masterlist')
+        $this->visit('masterlist')
             ->see('Master List')
             ->click('Add New Item')
             ->seePageIs('masterlist/create')
@@ -29,27 +28,28 @@ class MasterList extends TestCase
             //->type('Test Category', 'category')
             ->press('Add')
             ->seePageIs('masterlist')
-            ->see($ingredient->name)
-            ->click('Conversion')
+            ->see($ingredient->name);
+
+        $this->click('Conversion')
             ->see($ingredient->name . ' Conversion')
             ->type('1', 'left_quantity')
             ->type('1', 'right_quantity')
             ->select(2, 'right_unit')
             ->press('Update')
-            ->click('back')
-            ->click('Statistics')
+            ->click('back');
+
+        $this->click('Statistics')
             ->see($ingredient->name)
             ->see($ingredient->price)
-            ->see($ingredient->ap_quantity)
-            ->visit('masterlist')
+            ->see($ingredient->ap_quantity);
+
+        $this->visit('masterlist')
             ->click('Edit')
             ->type($ingredient->price + 1, 'price')
             ->press('Update')
             ->visit('masterlist')
             ->see($ingredient->price + 1)
             ->press('Delete')
-            ->dontSee($ingredient->name)
-            
-            ;
+            ->dontSee($ingredient->name);
     }
 }

@@ -113,14 +113,14 @@ class units_seeder extends Seeder
             [
                 'name' => 'ea',
                 'system' => '2',
-                'weight' => '0',
+                'weight' => '2',
                 'order' => '1',
                 'factor' => '1',
             ],
             [
                 'name' => 'portion',
                 'system' => '2',
-                'weight' => '0',
+                'weight' => '2',
                 'order' => '2',
                 'factor' => '1',
             ]

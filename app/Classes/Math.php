@@ -74,6 +74,14 @@ abstract class Math
             }
         }
 
+
+        if ($inputUnit->system == 2 || $outputUnit->system == 2) {
+            // Each
+            if ($inputUnit->id == 15) {
+                return $ingredient->ap_small_price * $ingredient->unit->factor * $quantity;
+            }
+        }
+
         // If input and output are different systems, but same type, convert input to output system,
         // modify the ingredient price to reflect new change, and continue on.
         if ($inputUnit->system != $outputUnit->system && $inputUnit->weight == $outputUnit->weight) {
@@ -166,7 +174,7 @@ abstract class Math
     {
         $data = collect();
         $data->cost = number_format(Math::CalcRecipeCost($recipe->id), 2);
-        $data->portionPrice = $data->cost / $recipe->portions_per_batch;
+        $data->portionPrice = number_format($data->cost / $recipe->portions_per_batch, 4);
 
         if ($recipe->menu_price == 0) {
             $data->costPercent = 0;

@@ -51,7 +51,7 @@ class RecipeElementHelper
         // Get all recipe elements for a recipe.
         $elements = $recipe->elements()->with('masterlist', 'unit')->get();
 
-        // TODO: This needs to be made DRY
+        
         foreach ($elements as $element) {
             $element->quantity = $element->quantity + 0;
             if ($element->type == 'masterlist') {
