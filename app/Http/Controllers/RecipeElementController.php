@@ -122,6 +122,7 @@ class RecipeElementController extends Controller
      */
     public function destroy(Recipe $recipe, RecipeElement $element)
     {
+        $this->authorize('element', [$element, $recipe]);
         $this->helper->delete($recipe, $element);
         return redirect()->route('recipes.elements.index', $recipe->id);
     }

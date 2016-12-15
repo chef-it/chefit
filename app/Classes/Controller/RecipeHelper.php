@@ -46,8 +46,31 @@ class RecipeHelper
 
         $pause = 1;
 
-        if (count($recipe->isSubRecipe)) {
-            foreach ($recipe->isSubRecipe as $element) {
+        $this->updateSubRecipes($recipe->isSubRecipe);
+
+    }
+
+    public function delete(Recipe $recipe)
+    {
+        $this->deleteSubRecipesElementRecords($recipe->isSubRecipe);
+        $recipe->delete();
+    }
+
+    public function deleteSubRecipesElementRecords($subRecipes)
+    {
+        if (count($subRecipes)) {
+            foreach ($subRecipes as $element) {
+                $recipe = $element->recipe;
+                $element->delete();
+                $this->updateNumbers($recipe);
+            }
+        }
+    }
+
+    public function updateSubRecipes($subRecipes)
+    {
+        if (count($subRecipes)) {
+            foreach ($subRecipes as $element) {
                 // Wherever the recipe is used as a sub recipe, update the element records with
                 // the new price changes, and then update the recipe numbers as well
                 $element->cost = Math::CalcElementCost($element);
@@ -55,6 +78,5 @@ class RecipeHelper
                 $this->updateNumbers($element->recipe);
             }
         }
-
     }
 }

@@ -123,7 +123,7 @@ class RecipeController extends Controller
     public function destroy(Recipe $recipe)
     {
         $this->authorize('recipe', $recipe);
-        $recipe->delete();
+        $this->helper->delete($recipe);
         return redirect()->route('recipes.index');
     }
 }
