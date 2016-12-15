@@ -1,8 +1,6 @@
 <?php
 namespace App\Classes;
 
-use App\Conversion;
-use App\MasterList;
 use App\Recipe;
 use App\RecipeElement;
 use Illuminate\Support\Facades\DB;
@@ -38,29 +36,27 @@ abstract class Math
      * @param $unit
      * @return mixed
      */
-    public static function CalcIngredientCost($master_list, $quantity, $unit)
+    public static function CalcIngredientCost(RecipeElement $element)
     {
-        // Get master_list record
-        $ingredient = MasterList::find($master_list);
+        $pause = 1;
         // Get units record for master_list small unit
-        $inputUnit = Unit::find(Math::GetApSmallUnit($ingredient->ap_unit));
-        // Get units record for $unit
-        $outputUnit = Unit::find($unit);
+        $inputUnit = $element->masterlist->unit;
+        $outputUnit = $element->unit;
+        $quantity = $element->quantity;
+
+        $pause = 1;
 
         // If a weight-volume conversion is required
         if ($inputUnit->weight != $outputUnit->weight) {
-            // Get conversion from database with measurement unit details included.
-            $conversion = Conversion::with('leftUnit', 'rightUnit')
-                ->where('master_list_id', '=', $master_list)
-                ->first();
+            $conversion = $element->masterlist->conversion;
             if (count($conversion)) {
                 $conversionFactor = $conversion->right_quantity / $conversion->left_quantity;
                 // Calculate Conversion
                 if ($inputUnit->system == $conversion->leftUnit->system && $inputUnit->weight == $conversion->leftUnit->weight) {
-                    $ingredient->ap_small_price /= $conversionFactor * $conversion->rightUnit->factor;
+                    $element->masterlist->ap_small_price /= $conversionFactor * $conversion->rightUnit->factor;
                     $inputUnit = $conversion->rightUnit;
                 } elseif ($inputUnit->system == $conversion->rightUnit->system && $inputUnit->weight == $conversion->rightUnit->weight) {
-                    $ingredient->ap_small_price *= $conversionFactor / $conversion->leftUnit->factor;
+                    $element->masterlist->ap_small_price *= $conversionFactor / $conversion->leftUnit->factor;
                     $inputUnit = $conversion->leftUnit;
                 } else {
                     // Return -1 to trigger button on recipes.elements.index letting the user know the conversion
@@ -78,7 +74,7 @@ abstract class Math
         if ($inputUnit->system == 2 || $outputUnit->system == 2) {
             // Each
             if ($inputUnit->id == 15) {
-                return $ingredient->ap_small_price * $ingredient->unit->factor * $quantity;
+                return $element->masterlist->ap_small_price * $element->masterlist->unit->factor * $quantity;
             }
         }
 
@@ -89,13 +85,13 @@ abstract class Math
                 // We're dealing with weight
                 if ($outputUnit->system == 1) {
                     // Input needs converted from grams to oz
-                    $ingredient->ap_small_price /= 0.0352739619;
+                    $element->masterlist->ap_small_price /= 0.0352739619;
                     $inputUnit->system = 1;
                     $inputUnit->id = 1;
                     $inputUnit->name = 'oz';
                 } else {
                     // Input needs converted from oz to gram
-                    $ingredient->ap_small_price *= 0.0352739619;
+                    $element->masterlist->ap_small_price *= 0.0352739619;
                     $inputUnit->system = 3;
                     $inputUnit->id = 3;
                     $inputUnit->name = 'gram';
@@ -104,13 +100,13 @@ abstract class Math
                 // We're dealing with volume
                 if ($outputUnit->system == 1) {
                     // Input needs converted from mL to fl-oz
-                    $ingredient->ap_small_price /= 0.033814;
+                    $element->masterlist->ap_small_price /= 0.033814;
                     $inputUnit->system = 1;
                     $inputUnit->id = 2;
                     $inputUnit->name = 'fl oz';
                 } else {
                     // Input needs converted from fl-oz to mL
-                    $ingredient->ap_small_price *= 0.033814;
+                    $element->masterlist->ap_small_price *= 0.033814;
                     $inputUnit->system = 3;
                     $inputUnit->id = 4;
                     $inputUnit->name = 'ml';
@@ -122,90 +118,51 @@ abstract class Math
         // return. Previous functions should have converted everything already, the if statement is a
         // double check.  TODO: change dump to error after weight <-> volume implemented.
         if ($inputUnit->system == $outputUnit->system && $inputUnit->weight == $outputUnit->weight) {
-            return $ingredient->ap_small_price * $outputUnit->factor * $ingredient->yield * $quantity / 100;
+            return $element->masterlist->ap_small_price * $outputUnit->factor * $element->masterlist->yield * $quantity / 100;
         } else {
             die(dump('Let Dale know this shouldn\'t have happened'));
         }
     }
 
-    /**
-     * Returns total cost of ingredients in a recipe
-     *
-     * @param $recipe
-     * @return int
-     */
-    public static function CalcRecipeCost($recipe)
+    public static function CalcElementCost(RecipeElement $element)
     {
-        $elements = RecipeElement::where('recipe_id', '=', $recipe)->get();
-        $recipe = collect();
-        $ingredient = collect();
-        $recipe->cost = 0;
+        $pause = 1;
 
-        // Cycle through each ingredient, calculate cost, and add to the total cost;
-        foreach ($elements as $element) {
-            if ($element->type == 'masterlist') {
-                $ingredient->cost = Math::CalcIngredientCost(
-                    $element->master_list_id,
-                    $element->quantity,
-                    $element->unit_id
-                );
-                if ($ingredient->cost != -1) {
-                    $recipe->cost += $ingredient->cost;
-                }
-            } else if ($element->type == 'recipe') {
-                $ingredient->cost = Math::CalcSubRecipeCost(
-                    $element->sub_recipe_id,
-                    $element->quantity,
-                    $element->unit_id
-                );
-            }
-
+        if ($element->type == 'masterlist') {
+            $cost = Math::CalcIngredientCost($element);
+        } else if ($element->type == 'recipe') {
+            $cost = Math::CalcSubRecipeCost($element);
         }
-        return $recipe->cost;
-    }
 
-    /**
-     * Returns recipe cost percentage by dividing cost of ingredients by menu price.
-     *
-     * @param $recipeID
-     * @return string
-     */
-    public static function CalcRecipeData(Recipe $recipe)
-    {
-        $data = collect();
-        $data->cost = number_format(Math::CalcRecipeCost($recipe->id), 2);
-        $data->portionPrice = number_format($data->cost / $recipe->portions_per_batch, 2);
-
-        if ($recipe->menu_price == 0) {
-            $data->costPercent = 0;
+        if ($element->type == 'masterlist' && $cost == -1) {
+            return link_to_route('masterlist.conversions.index', 'Conversion', [$element->master_list_id], ['class' => 'btn btn-xs btn-danger btn-block']);
+        } else if ($element->type == 'recipe' && $cost == -1) {
+            return 'I didn\'t account for this calculation. Please let me know I need to add it';
         } else {
-            // Divide total cost by menu price and return percentage.
-            $data->costPercent = number_format(($data->cost / $recipe->menu_price * 100), 2);
+            return number_format($cost, 2);
         }
-
-        return $data;
     }
     
-    public static function CalcSubRecipeCost($recipeID, $quantity, $unit)
+    
+    public static function CalcSubRecipeCost(RecipeElement $element)
     {
         //Get recipe data
-        $recipe = Auth::user()->recipes()->find($recipeID);
-        //Get the total cost of the recipe
-        $recipe->cost = Math::CalcRecipeCost($recipeID);
+        $recipe = $element->subrecipe;
         // Get units record for master_list small unit
-        $inputUnit = Unit::find(Math::GetApSmallUnit($recipe->batch_unit));
+        $inputUnit = $recipe->batchUnit;
         // Get units record for $unit
-        $outputUnit = Unit::find($unit);
+        $outputUnit = $element->unit;
+        $quantity = $element->quantity;
 
         //If recipe calls for portion, return cost divided by portions per recipe.
-        if ($unit == 16) {
+        if ($outputUnit->id == 16) {
             return $recipe->cost / $recipe->portions_per_batch * $quantity;
         }
 
         //If recipe calls for each, and sub recipe is set to each, return cost divided by each.
-        if ($unit == 15 && $recipe->batch_unit = 15) {
+        if ($outputUnit->id == 15 && $recipe->batch_unit = 15) {
             return $recipe->cost / $recipe->batch_quantity * $quantity;
-        } else if ($unit == 15) {
+        } else if ($outputUnit->id == 15) {
             //Recipe calls for each, sub recipe isn't set to each, so just return sub recipe cost.
             return $recipe->cost;
         }
@@ -215,6 +172,28 @@ abstract class Math
             return $recipe->smallCost * $outputUnit->factor * $quantity;
         } else {
             return -1;
+        }
+    }
+    
+    public static function CalcRecipeCost(Recipe $recipe)
+    {
+        if ($recipe->id == 1) {
+            $pause=1;
+        }
+        $cost = 0.00;
+        foreach ($recipe->elements as $element) {
+            $cost += $element->cost;
+        }
+        return $cost;
+    }
+    
+    public static function CalcCostPercent(Recipe $recipe)
+    {
+        if ($recipe->menu_price == 0) {
+            return 0;
+        } else {
+            // Divide total cost by menu price and return percentage.
+            return $recipe->cost / $recipe->menu_price * 100;
         }
     }
 

@@ -66,17 +66,17 @@
                         <p class="col-xs-8">Menu Price</p>
                         <p class="col-xs-4">{{ $currencysymbol }}{{ $recipe->menu_price }}</p>
                         <p class="col-xs-8">Costing Percent</p>
-                        <p class="col-xs-4">{{ $recipe->data->costPercent }}%</p>
+                        <p class="col-xs-4">{{ $recipe->cost_percent }}%</p>
                         @endif
                         <p class="col-xs-8">Recipe Cost</p>
-                        <p class="col-xs-4">{{ $currencysymbol }}{{ $recipe->data->cost }}</p>
+                        <p class="col-xs-4">{{ $currencysymbol }}{{ $recipe->cost }}</p>
                         <p class="col-xs-8">Batch Size</p>
                         <p class="col-xs-4">{{ $recipe->batch_quantity }} {{ $recipe->batchUnit->name }}</p>
                         @if ($recipe->batch_unit != 16 && $recipe->portions_per_batch > 1)
                         <p class="col-xs-8">Portions</p>
                         <p class="col-xs-4">{{ $recipe->portions_per_batch }}</p>
                         <p class="col-xs-8">Price Per Portion</p>
-                        <p class="col-xs-4">{{ $currencysymbol }}{{ $recipe->data->portionPrice }}</p>
+                        <p class="col-xs-4">{{ $currencysymbol }}{{ $recipe->portion_price }}</p>
                         @endif
                     </div>
                 </div>

@@ -8,11 +8,19 @@ use App\Classes\Math;
 class Recipe extends Model
 {
 
-    protected $appends = array('data');
-
-    public function getDataAttribute()
+    public function getCostAttribute($value)
     {
-        return Math::CalcRecipeData($this);
+        return number_format($value, 2);
+    }
+    
+    public function getCostPercentAttribute($value)
+    {
+        return number_format($value, 2) + 0;
+    }
+
+    public function getPortionPriceAttribute($value)
+    {
+        return $value;
     }
 
     public function getPortionsPerBatchAttribute($value)
@@ -25,6 +33,11 @@ class Recipe extends Model
         return $value + 0;
     }
 
+    public function getMenuPriceAttribute($MenuPrice)
+    {
+        return number_format($MenuPrice, 2);
+    }
+
     public function elements()
     {
         return $this->hasMany('App\RecipeElement');
@@ -35,8 +48,8 @@ class Recipe extends Model
         return $this->hasOne('App\Unit', 'id', 'batch_unit');
     }
 
-    public function getMenuPriceAttribute($MenuPrice)
+    public function isSubRecipe()
     {
-        return number_format($MenuPrice, 2);
+        return $this->hasMany('App\RecipeElement', 'sub_recipe_id', 'id');
     }
 }

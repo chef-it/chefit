@@ -60,7 +60,7 @@ class RecipeElementController extends Controller
     public function store(Requests\StoreRecipeComponent $request, Recipe $recipe, RecipeElement $element)
     {
         $this->authorize('recipe', $recipe);
-        $this->helper->store($element, $request);
+        $this->helper->store($recipe, $element, $request);
 
         return redirect()->route('recipes.elements.index', $element->recipe_id);
     }
@@ -109,7 +109,7 @@ class RecipeElementController extends Controller
     public function update(Requests\StoreRecipeComponent $request, Recipe $recipe, RecipeElement $element)
     {
         $this->authorize('element', [$element, $recipe]);
-        $this->helper->store($element, $request);
+        $this->helper->store($recipe, $element, $request);
 
         return redirect()->route('recipes.elements.index', $element->recipe_id);
     }
@@ -122,7 +122,7 @@ class RecipeElementController extends Controller
      */
     public function destroy(Recipe $recipe, RecipeElement $element)
     {
-        $element->delete();
+        $this->helper->delete($recipe, $element);
         return redirect()->route('recipes.elements.index', $recipe->id);
     }
 }

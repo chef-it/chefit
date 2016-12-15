@@ -30,4 +30,9 @@ class RecipeElement extends Model
     {
         return $value + 0;
     }
+
+    public function getCostAttribute($value)
+    {
+        return number_format($value, 2);
+    }
 }

@@ -36,7 +36,7 @@
                                     <td>Sub Recipe</td>
                                 @else
                                     <td>{{ $currencysymbol }}{{ $recipe->menu_price }}</td>
-                                    <td>{{ $recipe->data->costPercent }}</td>
+                                    <td>{{ $recipe->cost_percent }}%</td>
                                 @endif
                                 <td>{{ link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-xs btn-info btn-block']) }}</td>
                                 <td>{{ link_to_route('recipes.elements.index', 'View', [$recipe->id], ['class' => 'btn btn-xs btn-primary btn-block']) }}</td>
