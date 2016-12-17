@@ -29,5 +29,6 @@ class RecalculateRecipe
     {
         $event->oldCostPercent = $event->recipe->cost_percent;
         $this->recipeHelper->updateNumbers($event->recipe);
+        $pause = 1;
     }
 }

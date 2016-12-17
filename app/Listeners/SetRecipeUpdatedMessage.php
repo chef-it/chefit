@@ -30,8 +30,8 @@ class SetRecipeUpdatedMessage
         $recipeCostPercent = $event->recipe->cost_percent;
         if ($recipeCostPercent != $event->oldCostPercent) {
             $recipeName = $event->recipe->name;
-            $message = 'Recipe: "' . $recipeName . '" has updated. '.
-                'Costing percentage is has changed from ' . $event->oldCostPercent . '% to '.
+            $message = 'Recipe "' . $recipeName . '" has updated. '.
+                'Costing percentage has been changed from ' . $event->oldCostPercent . '% to '.
                 $recipeCostPercent . '%';;
             event(new SendSuccessMessage($message));
         }
