@@ -2,6 +2,7 @@
 
 namespace App\Classes\Controller;
 
+use App\Events\MasterListUpdated;
 use App\MasterListPriceTracking;
 use Auth;
 use App\Classes\Math;
@@ -61,6 +62,8 @@ class InvoiceRecordHelper
                 $masterlist->category = $request->category;
 
                 $masterlist->save();
+
+                event(new MasterListUpdated($masterlist));
             } else {
                 //invoice is older than current entry, add price tracking information
                 $pricetracking = new MasterListPriceTracking();

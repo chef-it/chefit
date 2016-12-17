@@ -2,6 +2,7 @@
 
 namespace App\Classes\Controller;
 
+use App\Events\RecipeUpdated;
 use app\Recipe;
 use app\RecipeElement;
 use Auth;
@@ -10,11 +11,9 @@ use App\Classes\Math;
 class RecipeElementHelper 
 {
 
-    protected $recipeHelper;
-
-    public function __construct(RecipeHelper $recipeHelper)
+    public function __construct()
     {
-        $this->recipeHelper = $recipeHelper;
+        
     }
     
     public function store(Recipe $recipe, RecipeElement $recipeElement, $request)
@@ -44,14 +43,20 @@ class RecipeElementHelper
 
         $recipeElement->save();
 
-        $this->recipeHelper->updateNumbers($recipe);
+        event(new RecipeUpdated($recipe));
     }
 
     public function delete(Recipe $recipe, RecipeElement $element)
     {
         $element->delete();
 
-        $this->recipeHelper->updateNumbers($recipe);
+        event(new RecipeUpdated($recipe));
+    }
+
+    public function updateNumbers(RecipeElement $element)
+    {
+        $element->cost = Math::CalcElementCost($element);
+        $element->save();
     }
 
     public function prepareRecipeForIndex(Recipe $recipe)

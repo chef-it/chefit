@@ -3,6 +3,7 @@
 namespace App\Classes\Controller;
 
 use App\Classes\Math;
+use App\Events\RecipeUpdated;
 use app\Recipe;
 use Auth;
 
@@ -29,11 +30,8 @@ class RecipeHelper
         }
         $recipe->user_id = Auth::user()->id;
         
-        $recipe->cost = Math::CalcRecipeCost($recipe);
-        $recipe->cost_percent = Math::CalcCostPercent($recipe);
-        $recipe->portion_price = $recipe->cost / $recipe->portions_per_batch;
-
         $recipe->save();
+        event(new RecipeUpdated($recipe));
     }
 
     public function updateNumbers(Recipe $recipe)
@@ -44,9 +42,18 @@ class RecipeHelper
 
         $recipe->save();
 
-        $pause = 1;
-
         $this->updateSubRecipes($recipe->isSubRecipe);
+    }
+
+    public function updateSubRecipes($subRecipes)
+    {
+        foreach ($subRecipes as $element) {
+            // Wherever the recipe is used as a sub recipe, update the element records with
+            // the new price changes, and then update that recipes numbers as well
+            $element->cost = Math::CalcElementCost($element);
+            $element->save();
+            event(new RecipeUpdated($element->recipe));
+        }
 
     }
 
@@ -58,25 +65,10 @@ class RecipeHelper
 
     public function deleteSubRecipesElementRecords($subRecipes)
     {
-        if (count($subRecipes)) {
-            foreach ($subRecipes as $element) {
-                $recipe = $element->recipe;
-                $element->delete();
-                $this->updateNumbers($recipe);
-            }
-        }
-    }
-
-    public function updateSubRecipes($subRecipes)
-    {
-        if (count($subRecipes)) {
-            foreach ($subRecipes as $element) {
-                // Wherever the recipe is used as a sub recipe, update the element records with
-                // the new price changes, and then update the recipe numbers as well
-                $element->cost = Math::CalcElementCost($element);
-                $element->save();
-                $this->updateNumbers($element->recipe);
-            }
+        foreach ($subRecipes as $element) {
+            $recipe = $element->recipe;
+            $element->delete();
+            event(new RecipeUpdated($recipe));
         }
     }
 }

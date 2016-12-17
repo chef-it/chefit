@@ -2,6 +2,7 @@
 
 namespace App\Classes\Controller;
 
+use app\MasterList;
 use App\MasterListPriceTracking;
 use Auth;
 use App\Classes\Math;

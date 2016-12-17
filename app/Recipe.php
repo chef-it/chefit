@@ -3,11 +3,10 @@
 namespace app;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Classes\Math;
 
 class Recipe extends Model
 {
-
+    
     public function getCostAttribute($value)
     {
         return number_format($value, 2);

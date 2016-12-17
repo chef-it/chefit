@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Controller\MasterListHelper;
+use App\Events\MasterListUpdated;
 use App\MasterList;
 use App\Classes\DesignHelper;
 use Auth;
@@ -106,6 +107,8 @@ class MasterListController extends Controller
         $this->authorize('masterlist', $masterlist);
         $this->helper->updatePriceTracking($masterlist, $request);
         $this->helper->store($masterlist, $request);
+
+        event(new MasterListUpdated($masterlist));
         
         return redirect()->route('masterlist.index');
     }

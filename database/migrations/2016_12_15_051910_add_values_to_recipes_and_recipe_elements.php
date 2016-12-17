@@ -14,16 +14,21 @@ class AddValuesToRecipesAndRecipeElements extends Migration
     public function up()
     {
         Schema::table('recipes', function (Blueprint $table) {
-            $table->decimal('cost', 10, 6)->unsigned()->after('batch_unit');
-            $table->decimal('cost_percent', 10, 4)->unsigned()->after('cost');
-            $table->decimal('portion_price', 10, 6)->unsigned()->after('cost_percent');
+            $table->decimal('cost', 10, 6)->unsigned()->default(0)->after('batch_unit');
+            $table->decimal('cost_percent', 10, 4)->unsigned()->default(0)->after('cost');
+            $table->decimal('portion_price', 10, 6)->unsigned()->default(0)->after('cost_percent');
         });
 
 
         Schema::table('recipe_elements', function(Blueprint $table)
         {
-            $table->decimal('cost', 10, 6)->unsigned()->after('unit_id');
+            $table->decimal('cost', 10, 6)->unsigned()->default(0)->after('unit_id');
         });
+
+        $masterlistEntries = \App\MasterList::all();
+        foreach ($masterlistEntries as $masterlist) {
+            event(new \App\Events\MasterListUpdated($masterlist));
+        }
     }
 
     /**

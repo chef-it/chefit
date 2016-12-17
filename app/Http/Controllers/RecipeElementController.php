@@ -86,13 +86,6 @@ class RecipeElementController extends Controller
     {
         $this->authorize('element', [$element, $recipe]);
 
-        //Haven't decided if this should refactor to helper.
-        if ($element->type == 'masterlist') {
-            $element->ingredientId = '{"type":"masterlist","id":"'.$element->master_list_id.'"}';
-        } else if ($element->type == 'recipe') {
-            $element->ingredientId = '{"type":"recipe","id":"'.$element->sub_recipe_id.'"}';
-        }
-
         return view('recipes.elements.edit')
             ->withElement($element)
             ->withIngredients(DesignHelper::IngredientsDropDown($recipe->id))
