@@ -36,7 +36,10 @@ class MasterListController extends Controller
 
         return view('masterlist.index')
             ->withMasterlist($masterlist)
-            ->withCurrencysymbol(DesignHelper::CurrencySymbol());
+            ->withCurrencysymbol(DesignHelper::CurrencySymbol())
+            ->withUnits(DesignHelper::UnitsDropDown())
+            ->withVendors(DesignHelper::VendorsDropDown())
+            ->withCategories(DesignHelper::MasterListCategoriesDropDown());
     }
 
     /**

@@ -20,3 +20,44 @@
 .panel-grey > .panel-footer + .panel-collapse > .panel-body {
     border-bottom-color: #404040
 }
+
+
+/* The side menu */
+.sideMenu {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 4; /* Stay on top */
+    top: 0;
+    right: -1px;
+    background-color: #FFF; /* Black*/
+    border-left: 1px solid #404040;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 45px; /* Place content 45px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* Position and style the close button (top right corner) */
+.sideMenu .closebtn {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    font-size: 36px;
+    margin-left: 50px;
+    z-index: 5;
+    color: black;
+    cursor:pointer;
+}
+
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#container {
+    transition: margin-right .5s;
+    padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sideMenu {padding-top: 15px;}
+    .sideMenu a {font-size: 18px;}
+}

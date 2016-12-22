@@ -5,10 +5,25 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.0/css/responsive.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/selectize-bootswatch/1.0/selectize.yeti.css">
 @endsection
 
+
+@section('sideMenu')
+    @include('masterlist.form')
+@endsection
+
+@section('sideMenu2')
+    <div id="vendor-list" class="list-group">
+        <a href="javascript:void(0)" class="list-group-item">Test Vendor 1</a>
+        <a href="javascript:void(0)" class="list-group-item">Test Vendor 2</a>
+        <a href="javascript:void(0)" class="list-group-item">Test Vendor 3</a>
+    </div>
+@endsection
+
+
 @section('content')
-    <div class="container">
+    <div id="container" class="container">
         <div id="list" class="col-md-12">
             <div class="block-flat">
                 <div class="header">
@@ -66,6 +81,9 @@
     <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.1.0/js/responsive.bootstrap.min.js"></script>
+    <script src="js/sidemenu.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
+
 
     <script type="text/javascript">
         $(document).ready(function(){
@@ -82,6 +100,24 @@
             //Search input style
             $('.dataTables_filter input').addClass('form-control').attr('placeholder','Search');
             $('.dataTables_length select').addClass('form-control');
+
+            $(document).ready(function(){
+                $("#vendor-list a").click(function(){
+                    var value = $(this).html();
+                    var input = $('#vendor');
+                    input.val(value);
+                });
+            });
+        });
+
+        $('[name=ap_unit]').selectize({
+            selectOnTab: true
+        });
+
+        $('#category').selectize({
+            selectOnTab: true,
+            create: true,
+            createOnBlur: true
         });
     </script>
 @endsection
