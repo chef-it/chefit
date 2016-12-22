@@ -9,7 +9,8 @@
         "laravel/framework": "5.3.*",
         "laravelcollective/html": "5.3.*",
         "doctrine/dbal": "^2.5",
-        "barryvdh/laravel-ide-helper": "^2.2"
+        "barryvdh/laravel-ide-helper": "^2.2",
+        "tymon/jwt-auth": "0.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -20,7 +21,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "tests/API/ApiTester.php"
         ],
         "psr-4": {
             "App\\": "app/"

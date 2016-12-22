@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+Route::group(['prefix' => 'v1'], function()
+{
+    Route::resource('authenticate', 'API\AuthenticateController', ['only' => ['index']]);
+    Route::post('authenticate', 'API\AuthenticateController@authenticate');
+    Route::post('test', 'API\AuthenticateController@test');
+    Route::resource('masterlist', 'API\MasterlistController', ['only' => ['index', 'store', 'edit']]);
+});

@@ -31,7 +31,7 @@ class MasterListHelper
         }
     }
 
-    public function store($masterlist, $request)
+    public function store($masterlist, $request, $user = null)
     {
         $masterlist->name = $request->input('name');
         $masterlist->price = $request->input('price');
@@ -45,7 +45,12 @@ class MasterListHelper
         $masterlist->ap_small_price = Math::CalcApUnitCost($request->price, $request->ap_quantity, $request->ap_unit);
         $masterlist->vendor = $request->input('vendor');
         $masterlist->category = $request->input('category');
-
-        Auth::user()->masterlist()->save($masterlist);
+        
+        if ($user) {
+            $user->masterlist()->save($masterlist);
+        } else {
+            Auth::user()->masterlist()->save($masterlist);
+        }
+        
     }
 }
